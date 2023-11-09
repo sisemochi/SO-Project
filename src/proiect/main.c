@@ -303,9 +303,7 @@ void printareDateRegulareNuBMP(struct dirent *fisier, char *caleFisier, struct s
 
 }
 
-void printareDateDirector(struct dirent *fisier, char *caleFisier, struct stat statFisier){}
-
-void printareDateLink(struct dirent *fisier, char *caleFisier, struct stat statFisier){
+void printareDateDirector(struct dirent *fisier, char *caleFisier, struct stat statFisier){
     int fd;
     char caleNoua[100];
     strcpy(caleNoua, caleFisier);
@@ -322,32 +320,15 @@ void printareDateLink(struct dirent *fisier, char *caleFisier, struct stat statF
         error("Eroare deschidere fisier iesire");
     }
 
-    write(fisierIesire, "nume legatura:", 12);
+    write(fisierIesire, "nume director: ", 15);
     write(fisierIesire, fisier->d_name, strlen(fisier->d_name));
     write(fisierIesire, "\n", 1);
 
-    long *dimensiuneLegatura = (long *)malloc(sizeof(long));
-    if (stat(caleNoua, &statFisier) == -1)
-    {
-        error("Eroare stat");
-    }
-    *dimensiuneLegatura = statFisier.st_size;
-    write(fisierIesire, "Dimensiune legatura: ", 21);
-    char *dimensiuneLegaturaChar = (char *)malloc(10 * sizeof(char));
-    sprintf(dimensiuneLegaturaChar, "%ld", *dimensiuneLegatura);
-    write(fisierIesire, dimensiuneLegaturaChar, strlen(dimensiuneLegaturaChar));
-    write(fisierIesire, "\n", 1);
-
-    long *dimensiune = (long *)malloc(sizeof(long));
-    if (stat(caleNoua, &statFisier) == -1)
-    {
-        error("Eroare stat");
-    }
-    *dimensiune = statFisier.st_size;
-    write(fisierIesire, "Dimensiune fisier: ", 12);
-    char *dimensiuneChar = (char *)malloc(10 * sizeof(char));
-    sprintf(dimensiuneChar, "%ld", *dimensiune);
-    write(fisierIesire, dimensiuneChar, strlen(dimensiuneChar));
+    unsigned int identificatorulUtilizatorului= statFisier.st_uid;
+    write(fisierIesire, "Identificatorul utilizatorului: ", 32);
+    char *identificatorulUtilizatoruluiChar = (char *)malloc(10 * sizeof(char));
+    sprintf(identificatorulUtilizatoruluiChar, "%d", identificatorulUtilizatorului);
+    write(fisierIesire, identificatorulUtilizatoruluiChar, strlen(identificatorulUtilizatoruluiChar));
     write(fisierIesire, "\n", 1);
 
     write(fisierIesire, "Drepturi de acces user: ", 24);
@@ -434,6 +415,113 @@ void printareDateLink(struct dirent *fisier, char *caleFisier, struct stat statF
     close(fd);
 }
 
+void printareDateLink(struct dirent *fisier, char *caleFisier, struct stat statFisier){
+    int fisierIesire = open("statistica.txt", O_WRONLY | O_CREAT | O_APPEND, 0644);
+    if (fisierIesire == -1)
+    {
+        error("Eroare deschidere fisier iesire");
+    }
+
+    write(fisierIesire, "nume legatura: ", 15);
+    write(fisierIesire, fisier->d_name, strlen(fisier->d_name));
+    write(fisierIesire, "\n", 1);
+
+    write(fisierIesire, "dimensiune legatura: ", 21);
+    char *dimensiuneChar = (char *)malloc(10 * sizeof(char));
+    sprintf(dimensiuneChar, "%lld", statFisier.st_size);
+    write(fisierIesire, dimensiuneChar, strlen(dimensiuneChar));
+    write(fisierIesire, "\n", 1);
+
+    write(fisierIesire, "dimensiune fisier target: ", 26);
+    char *dimensiuneFisierTargetChar = (char *)malloc(10 * sizeof(char));
+    sprintf(dimensiuneFisierTargetChar, "%lld", statFisier.st_size);
+    write(fisierIesire, dimensiuneFisierTargetChar, strlen(dimensiuneFisierTargetChar));
+    write(fisierIesire, "\n", 1);
+
+    write(fisierIesire, "Drepturi de acces user: ", 24);
+    if (statFisier.st_mode & S_IRUSR)
+    {
+        write(fisierIesire, "r", 1);
+    }
+    else
+    {
+        write(fisierIesire, "-", 1);
+    }
+    if (statFisier.st_mode & S_IWUSR)
+    {
+        write(fisierIesire, "w", 1);
+    }
+    else
+    {
+        write(fisierIesire, "-", 1);
+    }
+    if (statFisier.st_mode & S_IXUSR)
+    {
+        write(fisierIesire, "x", 1);
+    }
+    else
+    {
+        write(fisierIesire, "-", 1);
+    }
+    write(fisierIesire, "\n", 1);
+
+    write(fisierIesire, "Drepturi de acces grup: ", 24);
+    if (statFisier.st_mode & S_IRGRP)
+    {
+        write(fisierIesire, "r", 1);
+    }
+    else
+    {
+        write(fisierIesire, "-", 1);
+    }
+    if (statFisier.st_mode & S_IWGRP)
+    {
+        write(fisierIesire, "w", 1);
+    }
+    else
+    {
+        write(fisierIesire, "-", 1);
+    }
+    if (statFisier.st_mode & S_IXGRP)
+    {
+        write(fisierIesire, "x", 1);
+    }
+    else
+    {
+        write(fisierIesire, "-", 1);
+    }
+    write(fisierIesire, "\n", 1);
+
+    write(fisierIesire, "Drepturi de acces altii: ", 25);
+    if (statFisier.st_mode & S_IROTH)
+    {
+        write(fisierIesire, "r", 1);
+    }
+    else
+    {
+        write(fisierIesire, "-", 1);
+    }
+    if (statFisier.st_mode & S_IWOTH)
+    {
+        write(fisierIesire, "w", 1);
+    }
+    else
+    {
+        write(fisierIesire, "-", 1);
+    }
+    if (statFisier.st_mode & S_IXOTH)
+    {
+        write(fisierIesire, "x", 1);
+    }
+    else
+    {
+        write(fisierIesire, "-", 1);
+    }
+    write(fisierIesire, "\n\n", 2);
+
+    close(fisierIesire);
+}
+
 void decizieFisier(struct dirent *fisier, char *caleFisier)
 {
     struct stat statFisier;
@@ -441,17 +529,24 @@ void decizieFisier(struct dirent *fisier, char *caleFisier)
     strcpy(caleNoua, caleFisier);
     strcat(caleNoua, "/");
     strcat(caleNoua, fisier->d_name);
-    if (stat(caleNoua, &statFisier) == -1)
+
+    if (lstat(caleNoua, &statFisier) == -1)
     {
-        error("Eroare stat");
+        error("Eroare lstat");
     }
-    if (S_ISDIR(statFisier.st_mode))
+
+    if (S_ISLNK(statFisier.st_mode))
+    {
+        printf("%s este un Link\n\n", fisier->d_name);
+        printareDateLink(fisier, caleFisier, statFisier);
+    }
+    else if (S_ISDIR(statFisier.st_mode))
     {
         printf("%s este un Director\n\n", fisier->d_name);
+        printareDateDirector(fisier, caleFisier, statFisier);
     }
     else if (S_ISREG(statFisier.st_mode))
     {
-        //verificam daca este un .bmp
         char *extensie = strrchr(fisier->d_name, '.');
         if (extensie != NULL && strcmp(extensie, ".bmp") == 0)
         {
@@ -464,17 +559,12 @@ void decizieFisier(struct dirent *fisier, char *caleFisier)
             printareDateRegulareNuBMP(fisier, caleFisier, statFisier);
         }
     }
-    else if (S_ISLNK(statFisier.st_mode))
-    {
-        printf("%s este un Link\n\n", fisier->d_name);
-        printareDateLink(fisier, caleFisier, statFisier);
-    }
     else
     {
         printf("%s este Altceva\n\n", fisier->d_name);
     }
-
 }
+
 
 int main(int argc, char **argv)
 {
