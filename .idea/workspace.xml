@@ -20,11 +20,12 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="72a5c6e6-10dd-4165-9cdf-fefbe4c196bb" name="Changes" comment="adaugare argument pentru fisier iesire">
+    <list default="true" id="72a5c6e6-10dd-4165-9cdf-fefbe4c196bb" name="Changes" comment="implementare exit codes si statistica pentru link-uri">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Statistici/link_statistica.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/main" beforeDir="false" afterPath="$PROJECT_DIR$/main" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/proiect/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/proiect/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/statistica.txt" beforeDir="false" afterPath="$PROJECT_DIR$/statistica.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/statistica.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -105,7 +106,7 @@
       <workItem from="1699885838023" duration="2775000" />
       <workItem from="1700064093025" duration="22000" />
       <workItem from="1700305534014" duration="50000" />
-      <workItem from="1700305602618" duration="2048000" />
+      <workItem from="1700305602618" duration="2673000" />
     </task>
     <task id="LOCAL-00001" summary="modificare nume">
       <option name="closed" value="true" />
@@ -139,7 +140,15 @@
       <option name="project" value="LOCAL" />
       <updated>1700306799487</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="implementare exit codes si statistica pentru link-uri">
+      <option name="closed" value="true" />
+      <created>1700309783868</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1700309783868</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -167,6 +176,7 @@
     <MESSAGE value="implementare writeCheck, printareStatistica si FileInfo" />
     <MESSAGE value="implementare fork-uri" />
     <MESSAGE value="adaugare argument pentru fisier iesire" />
-    <option name="LAST_COMMIT_MESSAGE" value="adaugare argument pentru fisier iesire" />
+    <MESSAGE value="implementare exit codes si statistica pentru link-uri" />
+    <option name="LAST_COMMIT_MESSAGE" value="implementare exit codes si statistica pentru link-uri" />
   </component>
 </project>

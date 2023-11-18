@@ -228,7 +228,7 @@ void printareStatistica(FileInfo fileInfo, char *fisierIesire) {
 
 }
 
-void printareDateBMP(struct dirent *fisier, char *caleFisier, struct stat statFisier) {
+void printareDateBMP(struct dirent *fisier, char *caleFisier, struct stat statFisier, char *fisierIesire) {
     int fd;
     char caleNoua[100];
     strcpy(caleNoua, caleFisier);
@@ -297,13 +297,20 @@ void printareDateBMP(struct dirent *fisier, char *caleFisier, struct stat statFi
     }
     fileInfo.type = 'B';
 
-    printareStatistica(fileInfo, "statistica.txt");
+    char *caleIesire = malloc(100);
+    strcpy(caleIesire, fisierIesire);
+    strcat(caleIesire, "/");
+    strcat(caleIesire, fisier->d_name);
+    strcat(caleIesire, "_statistica.txt");
+
+
+    printareStatistica(fileInfo, caleIesire);
 
     close(fd);
 
 }
 
-void printareDateRegulareNuBMP(struct dirent *fisier, char *caleFisier, struct stat statFisier) {
+void printareDateRegulareNuBMP(struct dirent *fisier, char *caleFisier, struct stat statFisier, char *fisierIesire) {
     int fd;
     char caleNoua[100];
     strcpy(caleNoua, caleFisier);
@@ -311,11 +318,6 @@ void printareDateRegulareNuBMP(struct dirent *fisier, char *caleFisier, struct s
     strcat(caleNoua, fisier->d_name);
     if ((fd = open(caleNoua, O_RDONLY)) == -1) {
         error("Eroare deschidere fisier intrare");
-    }
-
-    int fisierIesire = open("statistica.txt", O_WRONLY | O_CREAT | O_APPEND, 0644);
-    if (fisierIesire == -1) {
-        error("Eroare deschidere fisier iesire");
     }
 
     FileInfo fileInfo;
@@ -371,13 +373,19 @@ void printareDateRegulareNuBMP(struct dirent *fisier, char *caleFisier, struct s
     }
     fileInfo.type = 'R';
 
-    printareStatistica(fileInfo, "statistica.txt");
+    char *caleIesire = malloc(100);
+    strcpy(caleIesire, fisierIesire);
+    strcat(caleIesire, "/");
+    strcat(caleIesire, fisier->d_name);
+    strcat(caleIesire, "_statistica.txt");
+
+    printareStatistica(fileInfo, caleIesire);
 
     close(fd);
 
 }
 
-void printareDateDirector(struct dirent *fisier, char *caleFisier, struct stat statFisier) {
+void printareDateDirector(struct dirent *fisier, char *caleFisier, struct stat statFisier, char *fisierIesire) {
     int fd;
     char caleNoua[100];
     strcpy(caleNoua, caleFisier);
@@ -438,7 +446,13 @@ void printareDateDirector(struct dirent *fisier, char *caleFisier, struct stat s
     }
     fileInfo.type = 'D';
 
-    printareStatistica(fileInfo, "statistica.txt");
+    char *caleIesire = malloc(100);
+    strcpy(caleIesire, fisierIesire);
+    strcat(caleIesire, "/");
+    strcat(caleIesire, fisier->d_name);
+    strcat(caleIesire, "_statistica.txt");
+
+    printareStatistica(fileInfo, caleIesire);
 
     close(fd);
 
@@ -528,15 +542,15 @@ void decizieFisier(struct dirent *fisier, char *caleFisier, char *fisierIesire) 
             printareDateLink(fisier, caleFisier, statFisier, fisierIesire);
         } else if (S_ISDIR(statFisier.st_mode)) {
             printf("%s este un Director\n\n", fisier->d_name);
-            printareDateDirector(fisier, caleFisier, statFisier);
+            printareDateDirector(fisier, caleFisier, statFisier, fisierIesire);
         } else if (S_ISREG(statFisier.st_mode)) {
             char *extensie = strrchr(fisier->d_name, '.');
             if (extensie != NULL && strcmp(extensie, ".bmp") == 0) {
                 printf("Fisierul %s este un .bmp\n\n", fisier->d_name);
-                printareDateBMP(fisier, caleFisier, statFisier);
+                printareDateBMP(fisier, caleFisier, statFisier, fisierIesire);
             } else {
                 printf("Fisierul %s nu este un .bmp\n\n", fisier->d_name);
-                printareDateRegulareNuBMP(fisier, caleFisier, statFisier);
+                printareDateRegulareNuBMP(fisier, caleFisier, statFisier, fisierIesire);
             }
         } else {
             printf("%s este Altceva\n\n", fisier->d_name);
