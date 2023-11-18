@@ -4,3 +4,9 @@ Drepturi de acces user: rwx
 Drepturi de acces grup: r-x
 Drepturi de acces altii: r-x
 
+nume director: DirectorSecundar
+Identificatorul utilizatorului: 501
+Drepturi de acces user: rwx
+Drepturi de acces grup: r-x
+Drepturi de acces altii: r-x
+

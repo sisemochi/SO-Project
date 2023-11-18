@@ -3,7 +3,18 @@ inaltime: 1280
 lungime: 1920
 Dimensiune: 7372938
 Identificatorul utilizatorului: 501
-Timpul ultimei modificari: 1699564542
+Timpul ultimei modificari: 1700311240
+numarul de legaturi: 1
+Drepturi de acces user: rw-
+Drepturi de acces grup: r--
+Drepturi de acces altii: r--
+
+nume fisier:imagine.bmp
+inaltime: 1280
+lungime: 1920
+Dimensiune: 7372938
+Identificatorul utilizatorului: 501
+Timpul ultimei modificari: 1700311455
 numarul de legaturi: 1
 Drepturi de acces user: rw-
 Drepturi de acces grup: r--

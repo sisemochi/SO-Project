@@ -29,6 +29,36 @@ void error(char *msg) {
     exit(1);
 }
 
+void bmpAlbNegru(int fd, char *header) {
+    int latime = *(int*)&header[18];
+    int inaltime = *(int*)&header[22];
+    int padding = (4 - (latime * 3) % 4) % 4;
+    int pixelDataOffset = *(int*)&header[10];
+    lseek(fd, pixelDataOffset, SEEK_SET);
+
+    unsigned char pixeli[3];
+    for (int y = 0; y < inaltime; y++) {
+        for (int x = 0; x < latime; x++) {
+            if (read(fd, pixeli, 3) != 3) {
+                error("Reading pixeli failed");
+                close(fd);
+            }
+
+            unsigned char gray = (unsigned char)(0.299 * pixeli[2] + 0.587 * pixeli[1] + 0.114 * pixeli[0]);
+            lseek(fd, -3, SEEK_CUR);
+            memset(pixeli, gray, sizeof(pixeli));
+            if (write(fd, pixeli, 3) != 3) {
+                error("Writing pixeli failed");
+                close(fd);
+            }
+        }
+        lseek(fd, padding, SEEK_CUR);
+    }
+
+}
+
+
+
 void writeCheck(int fd, char *buffer, unsigned long size) {
     if (write(fd, buffer, size) == -1) {
         error("Eroare scriere");
@@ -229,18 +259,21 @@ void printareStatistica(FileInfo fileInfo, char *fisierIesire) {
 }
 
 void printareDateBMP(struct dirent *fisier, char *caleFisier, struct stat statFisier, char *fisierIesire) {
-    int fd;
     char caleNoua[100];
     strcpy(caleNoua, caleFisier);
     strcat(caleNoua, "/");
     strcat(caleNoua, fisier->d_name);
-    if ((fd = open(caleNoua, O_RDONLY)) == -1) {
+
+    int fd;
+    if ((fd = open(caleNoua, O_RDWR)) == -1) {
         error("Eroare deschidere fisier intrare");
     }
     char *header = (char *) malloc(54 * sizeof(char));
     if (read(fd, header, 54) == -1) {
         error("Eroare citire header");
     }
+
+    bmpAlbNegru(fd, header);
 
     FileInfo fileInfo;
     strcpy(fileInfo.nume, fisier->d_name);
@@ -563,6 +596,17 @@ void decizieFisier(struct dirent *fisier, char *caleFisier, char *fisierIesire) 
         int status;
         waitpid(pid, &status, 0);
         if (WIFEXITED(status)) {
+            int codIesire = WEXITSTATUS(status);
+
+            int fd = open("statistica.txt", O_WRONLY | O_CREAT | O_APPEND, 0644);
+
+            write(fd, fisier->d_name, strlen(fisier->d_name));
+            write(fd, " ", 1);
+            char *codIesireChar = malloc(50);
+            sprintf(codIesireChar, "%d", codIesire);
+            write(fd, codIesireChar, strlen(codIesireChar));
+            write(fd, "\n", 1);
+
             printf("Procesul copil a terminat cu codul de iesire %d\n\n", WEXITSTATUS(status));
         } else {
             printf("Procesul copil a terminat cu eroare\n");
