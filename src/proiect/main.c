@@ -594,45 +594,68 @@ void printareDateLink(struct dirent *fisier, char *caleFisier, struct stat statF
 
 void decizieFisier(struct dirent *fisier, char *caleFisier)
 {
-    struct stat statFisier;
-    char caleNoua[100];
-    strcpy(caleNoua, caleFisier);
-    strcat(caleNoua, "/");
-    strcat(caleNoua, fisier->d_name);
+    pid_t pid;
+    pid = fork();
+    if(pid == -1){
+        error("Eroare fork");
+    }
+    else if (pid == 0){
+        //Proces child
+        struct stat statFisier;
+        char caleNoua[100];
+        strcpy(caleNoua, caleFisier);
+        strcat(caleNoua, "/");
+        strcat(caleNoua, fisier->d_name);
 
-    if (lstat(caleNoua, &statFisier) == -1)
-    {
-        error("Eroare lstat");
-    }
-
-    if (S_ISLNK(statFisier.st_mode))
-    {
-        printf("%s este un Link\n\n", fisier->d_name);
-        printareDateLink(fisier, caleFisier, statFisier);
-    }
-    else if (S_ISDIR(statFisier.st_mode))
-    {
-        printf("%s este un Director\n\n", fisier->d_name);
-        printareDateDirector(fisier, caleFisier, statFisier);
-    }
-    else if (S_ISREG(statFisier.st_mode))
-    {
-        char *extensie = strrchr(fisier->d_name, '.');
-        if (extensie != NULL && strcmp(extensie, ".bmp") == 0)
+        if (lstat(caleNoua, &statFisier) == -1)
         {
-            printf("Fisierul %s este un .bmp\n\n", fisier->d_name);
-            printareDateBMP(fisier, caleFisier, statFisier);
+            error("Eroare lstat");
+        }
+
+        if (S_ISLNK(statFisier.st_mode))
+        {
+            printf("%s este un Link\n\n", fisier->d_name);
+            printareDateLink(fisier, caleFisier, statFisier);
+        }
+        else if (S_ISDIR(statFisier.st_mode))
+        {
+            printf("%s este un Director\n\n", fisier->d_name);
+            printareDateDirector(fisier, caleFisier, statFisier);
+        }
+        else if (S_ISREG(statFisier.st_mode))
+        {
+            char *extensie = strrchr(fisier->d_name, '.');
+            if (extensie != NULL && strcmp(extensie, ".bmp") == 0)
+            {
+                printf("Fisierul %s este un .bmp\n\n", fisier->d_name);
+                printareDateBMP(fisier, caleFisier, statFisier);
+            }
+            else
+            {
+                printf("Fisierul %s nu este un .bmp\n\n", fisier->d_name);
+                printareDateRegulareNuBMP(fisier, caleFisier, statFisier);
+            }
         }
         else
         {
-            printf("Fisierul %s nu este un .bmp\n\n", fisier->d_name);
-            printareDateRegulareNuBMP(fisier, caleFisier, statFisier);
+            printf("%s este Altceva\n\n", fisier->d_name);
+        }
+
+        exit(0);//terminam procesul copil daca nu a fost terminat pana acum
+    }
+    else if(pid > 0){
+        //proces parinte
+        printf("Asteptam procesul copil...\n");
+        int status;
+        waitpid(pid, &status, 0);
+        if(WIFEXITED(status)){
+            printf("Procesul copil a terminat cu codul de iesire %d\n", WEXITSTATUS(status));
+        }
+        else{
+            printf("Procesul copil a terminat cu eroare\n");
         }
     }
-    else
-    {
-        printf("%s este Altceva\n\n", fisier->d_name);
-    }
+
 }
 
 
