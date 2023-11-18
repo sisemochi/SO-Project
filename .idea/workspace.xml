@@ -20,12 +20,11 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="72a5c6e6-10dd-4165-9cdf-fefbe4c196bb" name="Changes" comment="modificare nume">
-      <change afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Testing/imagine.bmp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Testing/text.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-Debug-log.txt" beforeDir="false" />
+    <list default="true" id="72a5c6e6-10dd-4165-9cdf-fefbe4c196bb" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/proiect/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/proiect/main.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/statistica.txt" beforeDir="false" afterPath="$PROJECT_DIR$/statistica.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,11 +77,6 @@
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="main.c" type="CppFileRunConfiguration" factoryName="CppFileRunConfiguration" temporary="true" PROGRAM_PARAMS="Testing" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="SO_Project" TARGET_NAME="main.c" CONFIG_NAME="main.c">
       <option name="sourceFile" value="src/proiect/main.c" />
       <method v="2">
@@ -108,6 +102,10 @@
       <option name="presentableId" value="Default" />
       <updated>1699557307165</updated>
       <workItem from="1699557308251" duration="5257000" />
+      <workItem from="1699885838023" duration="2775000" />
+      <workItem from="1700064093025" duration="22000" />
+      <workItem from="1700305534014" duration="50000" />
+      <workItem from="1700305602618" duration="177000" />
     </task>
     <task id="LOCAL-00001" summary="modificare nume">
       <option name="closed" value="true" />

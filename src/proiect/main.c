@@ -9,10 +9,194 @@
 #include <time.h>
 #include <dirent.h>
 
+typedef struct {
+    char nume[256];
+    int inaltime;
+    int lungime;
+    long size;
+    long uid;
+    long timpulModificarii;
+    int numarLegaturi;
+    char drepturiUser[3];
+    char drepturiGrup[3];
+    char drepturiAltii[3];
+    char type;
+    // Type of file ('B' for BMP, 'D' for Directory, 'L' for Link, 'R' for Regular, 'O' for Others)
+} FileInfo;
+
 void error(char *msg)
 {
     perror(msg);
     exit(1);
+}
+
+void writeCheck(int fd, char *buffer, unsigned long size)
+{
+    if (write(fd, buffer, size) == -1)
+    {
+        error("Eroare scriere");
+    }
+}
+
+void printareStatistica(FileInfo fileInfo, char *fisierIesire){
+    int fd;
+    if ((fd = open(fisierIesire, O_WRONLY | O_CREAT | O_APPEND, 0644)) == -1)
+    {
+        error("Eroare deschidere fisier iesire");
+    }
+
+    if(fileInfo.type == 'B'){
+        writeCheck(fd, "nume fisier:", 12);
+        writeCheck(fd, fileInfo.nume, strlen(fileInfo.nume));
+        writeCheck(fd, "\n", 1);
+
+        writeCheck(fd, "inaltime: ", 10);
+        char *inaltimeChar = (char *)malloc(10 * sizeof(char));
+        sprintf(inaltimeChar, "%d", fileInfo.inaltime);
+        writeCheck(fd, inaltimeChar, strlen(inaltimeChar));
+        writeCheck(fd, "\n", 1);
+
+        writeCheck(fd, "lungime: ", 9);
+        char *lungimeChar = (char *)malloc(10 * sizeof(char));
+        sprintf(lungimeChar, "%d", fileInfo.lungime);
+        writeCheck(fd, lungimeChar, strlen(lungimeChar));
+        writeCheck(fd, "\n", 1);
+
+        writeCheck(fd, "Dimensiune: ", 12);
+        char *dimensiuneChar = (char *)malloc(10 * sizeof(char));
+        sprintf(dimensiuneChar, "%ld", fileInfo.size);
+        writeCheck(fd, dimensiuneChar, strlen(dimensiuneChar));
+        writeCheck(fd, "\n", 1);
+
+        writeCheck(fd, "Identificatorul utilizatorului: ", 32);
+        char *identificatorulUtilizatoruluiChar = (char *)malloc(10 * sizeof(char));
+        sprintf(identificatorulUtilizatoruluiChar, "%ld", fileInfo.uid);
+        writeCheck(fd, identificatorulUtilizatoruluiChar, strlen(identificatorulUtilizatoruluiChar));
+        writeCheck(fd, "\n", 1);
+
+        writeCheck(fd, "Timpul ultimei modificari: ", 27);
+        char *timpulUltimeiModificariChar = (char *)malloc(10 * sizeof(char));
+        sprintf(timpulUltimeiModificariChar, "%ld", fileInfo.timpulModificarii);
+        writeCheck(fd, timpulUltimeiModificariChar, strlen(timpulUltimeiModificariChar));
+        writeCheck(fd, "\n", 1);
+
+        writeCheck(fd, "numarul de legaturi: ", 21);
+        char *numarulDeLegaturiChar = (char *)malloc(10 * sizeof(char));
+        sprintf(numarulDeLegaturiChar, "%d", fileInfo.numarLegaturi);
+        writeCheck(fd, numarulDeLegaturiChar, strlen(numarulDeLegaturiChar));
+        writeCheck(fd, "\n", 1);
+
+        writeCheck(fd, "Drepturi de acces user: ", 24);
+        writeCheck(fd, fileInfo.drepturiUser, 3);
+        writeCheck(fd, "\n", 1);
+
+        writeCheck(fd, "Drepturi de acces grup: ", 24);
+        writeCheck(fd, fileInfo.drepturiGrup, 3);
+        writeCheck(fd, "\n", 1);
+
+        writeCheck(fd, "Drepturi de acces altii: ", 25);
+        writeCheck(fd, fileInfo.drepturiAltii, 3);
+        writeCheck(fd, "\n\n", 2);
+    }
+
+    if(fileInfo.type=='R'){
+        writeCheck(fd, "nume fisier:", 12);
+        writeCheck(fd, fileInfo.nume, strlen(fileInfo.nume));
+        writeCheck(fd, "\n", 1);
+
+        writeCheck(fd, "Dimensiune: ", 12);
+        char *dimensiuneChar = (char *)malloc(10 * sizeof(char));
+        sprintf(dimensiuneChar, "%ld", fileInfo.size);
+        writeCheck(fd, dimensiuneChar, strlen(dimensiuneChar));
+        writeCheck(fd, "\n", 1);
+
+        writeCheck(fd, "Identificatorul utilizatorului: ", 32);
+        char *identificatorulUtilizatoruluiChar = (char *)malloc(10 * sizeof(char));
+        sprintf(identificatorulUtilizatoruluiChar, "%ld", fileInfo.uid);
+        writeCheck(fd, identificatorulUtilizatoruluiChar, strlen(identificatorulUtilizatoruluiChar));
+        writeCheck(fd, "\n", 1);
+
+        writeCheck(fd, "Timpul ultimei modificari: ", 27);
+        char *timpulUltimeiModificariChar = (char *)malloc(10 * sizeof(char));
+        sprintf(timpulUltimeiModificariChar, "%ld", fileInfo.timpulModificarii);
+        writeCheck(fd, timpulUltimeiModificariChar, strlen(timpulUltimeiModificariChar));
+        writeCheck(fd, "\n", 1);
+
+        writeCheck(fd, "numarul de legaturi: ", 21);
+        char *numarulDeLegaturiChar = (char *)malloc(10 * sizeof(char));
+        sprintf(numarulDeLegaturiChar, "%d", fileInfo.numarLegaturi);
+        writeCheck(fd, numarulDeLegaturiChar, strlen(numarulDeLegaturiChar));
+        writeCheck(fd, "\n", 1);
+
+        writeCheck(fd, "Drepturi de acces user: ", 24);
+        writeCheck(fd, fileInfo.drepturiUser, 3);
+        writeCheck(fd, "\n", 1);
+
+        writeCheck(fd, "Drepturi de acces grup: ", 24);
+        writeCheck(fd, fileInfo.drepturiGrup, 3);
+        writeCheck(fd, "\n", 1);
+
+        writeCheck(fd, "Drepturi de acces altii: ", 25);
+        writeCheck(fd, fileInfo.drepturiAltii, 3);
+        writeCheck(fd, "\n\n", 2);
+    }
+
+    if(fileInfo.type == 'L'){
+        writeCheck(fd, "nume legatura: ", 15);
+        writeCheck(fd, fileInfo.nume, strlen(fileInfo.nume));
+        writeCheck(fd, "\n", 1);
+
+        writeCheck(fd, "dimensiune legatura: ", 21);
+        char *dimensiuneChar = (char *)malloc(10 * sizeof(char));
+        sprintf(dimensiuneChar, "%ld", fileInfo.size);
+        writeCheck(fd, dimensiuneChar, strlen(dimensiuneChar));
+        writeCheck(fd, "\n", 1);
+
+        writeCheck(fd, "dimensiune fisier target: ", 26);
+        char *dimensiuneFisierTargetChar = (char *)malloc(10 * sizeof(char));
+        sprintf(dimensiuneFisierTargetChar, "%ld", fileInfo.size);
+        writeCheck(fd, dimensiuneFisierTargetChar, strlen(dimensiuneFisierTargetChar));
+        writeCheck(fd, "\n", 1);
+
+        writeCheck(fd, "Drepturi de acces user: ", 24);
+        writeCheck(fd, fileInfo.drepturiUser, 3);
+        writeCheck(fd, "\n", 1);
+
+        writeCheck(fd, "Drepturi de acces grup: ", 24);
+        writeCheck(fd, fileInfo.drepturiGrup, 3);
+        writeCheck(fd, "\n", 1);
+
+        writeCheck(fd, "Drepturi de acces altii: ", 25);
+        writeCheck(fd, fileInfo.drepturiAltii, 3);
+        writeCheck(fd, "\n\n", 2);
+    }
+
+    if(fileInfo.type == 'D'){
+        writeCheck(fd, "nume director: ", 15);
+        writeCheck(fd, fileInfo.nume, strlen(fileInfo.nume));
+        writeCheck(fd, "\n", 1);
+
+        writeCheck(fd, "Identificatorul utilizatorului: ", 32);
+        char *identificatorulUtilizatoruluiChar = (char *)malloc(10 * sizeof(char));
+        sprintf(identificatorulUtilizatoruluiChar, "%ld", fileInfo.uid);
+        writeCheck(fd, identificatorulUtilizatoruluiChar, strlen(identificatorulUtilizatoruluiChar));
+        writeCheck(fd, "\n", 1);
+
+        writeCheck(fd, "Drepturi de acces user: ", 24);
+        writeCheck(fd, fileInfo.drepturiUser, 3);
+        writeCheck(fd, "\n", 1);
+
+        writeCheck(fd, "Drepturi de acces grup: ", 24);
+        writeCheck(fd, fileInfo.drepturiGrup, 3);
+        writeCheck(fd, "\n", 1);
+
+        writeCheck(fd, "Drepturi de acces altii: ", 25);
+        writeCheck(fd, fileInfo.drepturiAltii, 3);
+        writeCheck(fd, "\n\n", 2);
+    }
+
+    close(fd);
+
 }
 
 void printareDateBMP(struct dirent *fisier, char *caleFisier, struct stat statFisier){
@@ -31,140 +215,92 @@ void printareDateBMP(struct dirent *fisier, char *caleFisier, struct stat statFi
         error("Eroare citire header");
     }
 
-    int fisierIesire = open("statistica.txt", O_WRONLY | O_CREAT | O_APPEND, 0644);
-    if (fisierIesire == -1)
-    {
-        error("Eroare deschidere fisier iesire");
-    }
-
-    write(fisierIesire, "nume fisier:", 12);
-    write(fisierIesire, fisier->d_name, strlen(fisier->d_name));
-    write(fisierIesire, "\n", 1);
-
-    int *inaltime = (int *)malloc(sizeof(int));
-    memcpy(inaltime, header + 22, 4);
-    write(fisierIesire, "inaltime: ", 10);
-    char *inaltimeChar = (char *)malloc(10 * sizeof(char));
-    sprintf(inaltimeChar, "%d", *inaltime);
-    write(fisierIesire, inaltimeChar, strlen(inaltimeChar));
-    write(fisierIesire, "\n", 1);
-
-    int *lungime = (int *)malloc(sizeof(int));
-    memcpy(lungime, header + 18, 4);
-    write(fisierIesire, "lungime: ", 9);
-    char *lungimeChar = (char *)malloc(10 * sizeof(char));
-    sprintf(lungimeChar, "%d", *lungime);
-    write(fisierIesire, lungimeChar, strlen(lungimeChar));
-    write(fisierIesire, "\n", 1);
-
-    int *dimensiune = (int *)malloc(sizeof(int));
-    memcpy(dimensiune, header + 2, 4);
-    write(fisierIesire, "Dimensiune: ", 12);
-    char *dimensiuneChar = (char *)malloc(10 * sizeof(char));
-    sprintf(dimensiuneChar, "%d", *dimensiune);
-    write(fisierIesire, dimensiuneChar, strlen(dimensiuneChar));
-    write(fisierIesire, "\n", 1);
-
-    unsigned int identificatorulUtilizatorului= statFisier.st_uid;
-    write(fisierIesire, "Identificatorul utilizatorului: ", 32);
-    char *identificatorulUtilizatoruluiChar = (char *)malloc(10 * sizeof(char));
-    sprintf(identificatorulUtilizatoruluiChar, "%d", identificatorulUtilizatorului);
-    write(fisierIesire, identificatorulUtilizatoruluiChar, strlen(identificatorulUtilizatoruluiChar));
-    write(fisierIesire, "\n", 1);
-
-    write(fisierIesire, "Timpul ultimei modificari: ", 27);
-    char *timpulUltimeiModificariChar = (char *)malloc(10 * sizeof(char));
-    sprintf(timpulUltimeiModificariChar, "%s", ctime(&statFisier.st_mtime));
-    write(fisierIesire, timpulUltimeiModificariChar, strlen(timpulUltimeiModificariChar));
-
-    write(fisierIesire, "numarul de legaturi: ", 21);
-    char *numarulDeLegaturiChar = (char *)malloc(10 * sizeof(char));
-    sprintf(numarulDeLegaturiChar, "%d", statFisier.st_nlink);
-    write(fisierIesire, numarulDeLegaturiChar, strlen(numarulDeLegaturiChar));
-    write(fisierIesire, "\n", 1);
-
-    write(fisierIesire, "Drepturi de acces user: ", 24);
+    FileInfo fileInfo;
+    strcpy(fileInfo.nume, fisier->d_name);
+    fileInfo.inaltime = *(int *)(header + 22);
+    fileInfo.lungime = *(int *)(header + 18);
+    fileInfo.size = *(int *)(header + 2);
+    fileInfo.uid = statFisier.st_uid;
+    fileInfo.timpulModificarii = statFisier.st_mtime;
+    fileInfo.numarLegaturi = statFisier.st_nlink;
     if (statFisier.st_mode & S_IRUSR)
     {
-        write(fisierIesire, "r", 1);
+        fileInfo.drepturiUser[0] = 'r';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiUser[0] = '-';
     }
     if (statFisier.st_mode & S_IWUSR)
     {
-        write(fisierIesire, "w", 1);
+        fileInfo.drepturiUser[1] = 'w';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiUser[1] = '-';
     }
     if (statFisier.st_mode & S_IXUSR)
     {
-        write(fisierIesire, "x", 1);
+        fileInfo.drepturiUser[2] = 'x';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiUser[2] = '-';
     }
-    write(fisierIesire, "\n", 1);
-
-    write(fisierIesire, "Drepturi de acces grup: ", 24);
     if (statFisier.st_mode & S_IRGRP)
     {
-        write(fisierIesire, "r", 1);
+        fileInfo.drepturiGrup[0] = 'r';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiGrup[0] = '-';
     }
     if (statFisier.st_mode & S_IWGRP)
     {
-        write(fisierIesire, "w", 1);
+        fileInfo.drepturiGrup[1] = 'w';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiGrup[1] = '-';
     }
     if (statFisier.st_mode & S_IXGRP)
     {
-        write(fisierIesire, "x", 1);
+        fileInfo.drepturiGrup[2] = 'x';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiGrup[2] = '-';
     }
-    write(fisierIesire, "\n", 1);
-
-    write(fisierIesire, "Drepturi de acces altii: ", 25);
     if (statFisier.st_mode & S_IROTH)
     {
-        write(fisierIesire, "r", 1);
+        fileInfo.drepturiAltii[0] = 'r';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiAltii[0] = '-';
     }
     if (statFisier.st_mode & S_IWOTH)
     {
-        write(fisierIesire, "w", 1);
+        fileInfo.drepturiAltii[1] = 'w';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiAltii[1] = '-';
     }
     if (statFisier.st_mode & S_IXOTH)
     {
-        write(fisierIesire, "x", 1);
+        fileInfo.drepturiAltii[2] = 'x';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiAltii[2] = '-';
     }
-    write(fisierIesire, "\n\n", 2);
+    fileInfo.type = 'B';
+
+    printareStatistica(fileInfo, "statistica.txt");
 
     close(fd);
+
 }
 
 void printareDateRegulareNuBMP(struct dirent *fisier, char *caleFisier, struct stat statFisier){
@@ -184,120 +320,87 @@ void printareDateRegulareNuBMP(struct dirent *fisier, char *caleFisier, struct s
         error("Eroare deschidere fisier iesire");
     }
 
-    write(fisierIesire, "nume fisier:", 12);
-    write(fisierIesire, fisier->d_name, strlen(fisier->d_name));
-    write(fisierIesire, "\n", 1);
-
-    long *dimensiune = (long *)malloc(sizeof(long));
-    if (stat(caleNoua, &statFisier) == -1)
-    {
-        error("Eroare stat");
-    }
-    *dimensiune = statFisier.st_size;
-    write(fisierIesire, "Dimensiune: ", 12);
-    char *dimensiuneChar = (char *)malloc(10 * sizeof(char));
-    sprintf(dimensiuneChar, "%ld", *dimensiune);
-    write(fisierIesire, dimensiuneChar, strlen(dimensiuneChar));
-    write(fisierIesire, "\n", 1);
-
-    unsigned int identificatorulUtilizatorului= statFisier.st_uid;
-    write(fisierIesire, "Identificatorul utilizatorului: ", 32);
-    char *identificatorulUtilizatoruluiChar = (char *)malloc(10 * sizeof(char));
-    sprintf(identificatorulUtilizatoruluiChar, "%d", identificatorulUtilizatorului);
-    write(fisierIesire, identificatorulUtilizatoruluiChar, strlen(identificatorulUtilizatoruluiChar));
-    write(fisierIesire, "\n", 1);
-
-    write(fisierIesire, "Timpul ultimei modificari: ", 27);
-    char *timpulUltimeiModificariChar = (char *)malloc(10 * sizeof(char));
-    sprintf(timpulUltimeiModificariChar, "%s", ctime(&statFisier.st_mtime));
-    write(fisierIesire, timpulUltimeiModificariChar, strlen(timpulUltimeiModificariChar));
-
-    write(fisierIesire, "numarul de legaturi: ", 21);
-    char *numarulDeLegaturiChar = (char *)malloc(10 * sizeof(char));
-    sprintf(numarulDeLegaturiChar, "%d", statFisier.st_nlink);
-    write(fisierIesire, numarulDeLegaturiChar, strlen(numarulDeLegaturiChar));
-    write(fisierIesire, "\n", 1);
-
-    write(fisierIesire, "Drepturi de acces user: ", 24);
+    FileInfo fileInfo;
+    strcpy(fileInfo.nume, fisier->d_name);
+    fileInfo.size = statFisier.st_size;
+    fileInfo.uid = statFisier.st_uid;
+    fileInfo.timpulModificarii = statFisier.st_mtime;
+    fileInfo.numarLegaturi = statFisier.st_nlink;
     if (statFisier.st_mode & S_IRUSR)
     {
-        write(fisierIesire, "r", 1);
+        fileInfo.drepturiUser[0] = 'r';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiUser[0] = '-';
     }
     if (statFisier.st_mode & S_IWUSR)
     {
-        write(fisierIesire, "w", 1);
+        fileInfo.drepturiUser[1] = 'w';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiUser[1] = '-';
     }
     if (statFisier.st_mode & S_IXUSR)
     {
-        write(fisierIesire, "x", 1);
+        fileInfo.drepturiUser[2] = 'x';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiUser[2] = '-';
     }
-    write(fisierIesire, "\n", 1);
-
-    write(fisierIesire, "Drepturi de acces grup: ", 24);
     if (statFisier.st_mode & S_IRGRP)
     {
-        write(fisierIesire, "r", 1);
+        fileInfo.drepturiGrup[0] = 'r';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiGrup[0] = '-';
     }
     if (statFisier.st_mode & S_IWGRP)
     {
-        write(fisierIesire, "w", 1);
+        fileInfo.drepturiGrup[1] = 'w';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiGrup[1] = '-';
     }
     if (statFisier.st_mode & S_IXGRP)
     {
-        write(fisierIesire, "x", 1);
+        fileInfo.drepturiGrup[2] = 'x';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiGrup[2] = '-';
     }
-    write(fisierIesire, "\n", 1);
-
-    write(fisierIesire, "Drepturi de acces altii: ", 25);
     if (statFisier.st_mode & S_IROTH)
     {
-        write(fisierIesire, "r", 1);
+        fileInfo.drepturiAltii[0] = 'r';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiAltii[0] = '-';
     }
     if (statFisier.st_mode & S_IWOTH)
     {
-        write(fisierIesire, "w", 1);
+        fileInfo.drepturiAltii[1] = 'w';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiAltii[1] = '-';
     }
     if (statFisier.st_mode & S_IXOTH)
     {
-        write(fisierIesire, "x", 1);
+        fileInfo.drepturiAltii[2] = 'x';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiAltii[2] = '-';
     }
-    write(fisierIesire, "\n\n", 2);
+    fileInfo.type = 'R';
+
+    printareStatistica(fileInfo, "statistica.txt");
 
     close(fd);
 
@@ -314,105 +417,88 @@ void printareDateDirector(struct dirent *fisier, char *caleFisier, struct stat s
         error("Eroare deschidere fisier intrare");
     }
 
-    int fisierIesire = open("statistica.txt", O_WRONLY | O_CREAT | O_APPEND, 0644);
-    if (fisierIesire == -1)
-    {
-        error("Eroare deschidere fisier iesire");
-    }
-
-    write(fisierIesire, "nume director: ", 15);
-    write(fisierIesire, fisier->d_name, strlen(fisier->d_name));
-    write(fisierIesire, "\n", 1);
-
-    unsigned int identificatorulUtilizatorului= statFisier.st_uid;
-    write(fisierIesire, "Identificatorul utilizatorului: ", 32);
-    char *identificatorulUtilizatoruluiChar = (char *)malloc(10 * sizeof(char));
-    sprintf(identificatorulUtilizatoruluiChar, "%d", identificatorulUtilizatorului);
-    write(fisierIesire, identificatorulUtilizatoruluiChar, strlen(identificatorulUtilizatoruluiChar));
-    write(fisierIesire, "\n", 1);
-
-    write(fisierIesire, "Drepturi de acces user: ", 24);
+    FileInfo fileInfo;
+    strcpy(fileInfo.nume, fisier->d_name);
+    fileInfo.uid = statFisier.st_uid;
+    fileInfo.numarLegaturi = statFisier.st_nlink;
     if (statFisier.st_mode & S_IRUSR)
     {
-        write(fisierIesire, "r", 1);
+        fileInfo.drepturiUser[0] = 'r';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiUser[0] = '-';
     }
     if (statFisier.st_mode & S_IWUSR)
     {
-        write(fisierIesire, "w", 1);
+        fileInfo.drepturiUser[1] = 'w';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiUser[1] = '-';
     }
     if (statFisier.st_mode & S_IXUSR)
     {
-        write(fisierIesire, "x", 1);
+        fileInfo.drepturiUser[2] = 'x';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiUser[2] = '-';
     }
-    write(fisierIesire, "\n", 1);
-
-    write(fisierIesire, "Drepturi de acces grup: ", 24);
     if (statFisier.st_mode & S_IRGRP)
     {
-        write(fisierIesire, "r", 1);
+        fileInfo.drepturiGrup[0] = 'r';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiGrup[0] = '-';
     }
     if (statFisier.st_mode & S_IWGRP)
     {
-        write(fisierIesire, "w", 1);
+        fileInfo.drepturiGrup[1] = 'w';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiGrup[1] = '-';
     }
     if (statFisier.st_mode & S_IXGRP)
     {
-        write(fisierIesire, "x", 1);
+        fileInfo.drepturiGrup[2] = 'x';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiGrup[2] = '-';
     }
-    write(fisierIesire, "\n", 1);
-
-    write(fisierIesire, "Drepturi de acces altii: ", 25);
     if (statFisier.st_mode & S_IROTH)
     {
-        write(fisierIesire, "r", 1);
+        fileInfo.drepturiAltii[0] = 'r';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiAltii[0] = '-';
     }
     if (statFisier.st_mode & S_IWOTH)
     {
-        write(fisierIesire, "w", 1);
+        fileInfo.drepturiAltii[1] = 'w';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiAltii[1] = '-';
     }
     if (statFisier.st_mode & S_IXOTH)
     {
-        write(fisierIesire, "x", 1);
+        fileInfo.drepturiAltii[2] = 'x';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiAltii[2] = '-';
     }
-    write(fisierIesire, "\n\n", 2);
+    fileInfo.type = 'D';
+
+    printareStatistica(fileInfo, "statistica.txt");
 
     close(fd);
+
 }
 
 void printareDateLink(struct dirent *fisier, char *caleFisier, struct stat statFisier){
@@ -422,102 +508,86 @@ void printareDateLink(struct dirent *fisier, char *caleFisier, struct stat statF
         error("Eroare deschidere fisier iesire");
     }
 
-    write(fisierIesire, "nume legatura: ", 15);
-    write(fisierIesire, fisier->d_name, strlen(fisier->d_name));
-    write(fisierIesire, "\n", 1);
-
-    write(fisierIesire, "dimensiune legatura: ", 21);
-    char *dimensiuneChar = (char *)malloc(10 * sizeof(char));
-    sprintf(dimensiuneChar, "%lld", statFisier.st_size);
-    write(fisierIesire, dimensiuneChar, strlen(dimensiuneChar));
-    write(fisierIesire, "\n", 1);
-
-    write(fisierIesire, "dimensiune fisier target: ", 26);
-    char *dimensiuneFisierTargetChar = (char *)malloc(10 * sizeof(char));
-    sprintf(dimensiuneFisierTargetChar, "%lld", statFisier.st_size);
-    write(fisierIesire, dimensiuneFisierTargetChar, strlen(dimensiuneFisierTargetChar));
-    write(fisierIesire, "\n", 1);
-
-    write(fisierIesire, "Drepturi de acces user: ", 24);
+    FileInfo fileInfo;
+    strcpy(fileInfo.nume, fisier->d_name);
+    fileInfo.size = statFisier.st_size;
+    fileInfo.uid = statFisier.st_uid;
+    fileInfo.numarLegaturi = statFisier.st_nlink;
     if (statFisier.st_mode & S_IRUSR)
     {
-        write(fisierIesire, "r", 1);
+        fileInfo.drepturiUser[0] = 'r';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiUser[0] = '-';
     }
     if (statFisier.st_mode & S_IWUSR)
     {
-        write(fisierIesire, "w", 1);
+        fileInfo.drepturiUser[1] = 'w';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiUser[1] = '-';
     }
     if (statFisier.st_mode & S_IXUSR)
     {
-        write(fisierIesire, "x", 1);
+        fileInfo.drepturiUser[2] = 'x';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiUser[2] = '-';
     }
-    write(fisierIesire, "\n", 1);
-
-    write(fisierIesire, "Drepturi de acces grup: ", 24);
     if (statFisier.st_mode & S_IRGRP)
     {
-        write(fisierIesire, "r", 1);
+        fileInfo.drepturiGrup[0] = 'r';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiGrup[0] = '-';
     }
     if (statFisier.st_mode & S_IWGRP)
     {
-        write(fisierIesire, "w", 1);
+        fileInfo.drepturiGrup[1] = 'w';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiGrup[1] = '-';
     }
     if (statFisier.st_mode & S_IXGRP)
     {
-        write(fisierIesire, "x", 1);
+        fileInfo.drepturiGrup[2] = 'x';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiGrup[2] = '-';
     }
-    write(fisierIesire, "\n", 1);
-
-    write(fisierIesire, "Drepturi de acces altii: ", 25);
     if (statFisier.st_mode & S_IROTH)
     {
-        write(fisierIesire, "r", 1);
+        fileInfo.drepturiAltii[0] = 'r';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiAltii[0] = '-';
     }
     if (statFisier.st_mode & S_IWOTH)
     {
-        write(fisierIesire, "w", 1);
+        fileInfo.drepturiAltii[1] = 'w';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiAltii[1] = '-';
     }
     if (statFisier.st_mode & S_IXOTH)
     {
-        write(fisierIesire, "x", 1);
+        fileInfo.drepturiAltii[2] = 'x';
     }
     else
     {
-        write(fisierIesire, "-", 1);
+        fileInfo.drepturiAltii[2] = '-';
     }
-    write(fisierIesire, "\n\n", 2);
+    fileInfo.type = 'L';
+
+    printareStatistica(fileInfo, "statistica.txt");
 
     close(fisierIesire);
 }
