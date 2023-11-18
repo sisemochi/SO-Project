@@ -40,158 +40,191 @@ void printareStatistica(FileInfo fileInfo, char *fisierIesire) {
     if ((fd = open(fisierIesire, O_WRONLY | O_CREAT | O_APPEND, 0644)) == -1) {
         error("Eroare deschidere fisier iesire");
     }
+    int nrLinii = 0;
 
     if (fileInfo.type == 'B') {
         writeCheck(fd, "nume fisier:", 12);
         writeCheck(fd, fileInfo.nume, strlen(fileInfo.nume));
         writeCheck(fd, "\n", 1);
+        nrLinii++;
 
         writeCheck(fd, "inaltime: ", 10);
         char *inaltimeChar = (char *) malloc(10 * sizeof(char));
         sprintf(inaltimeChar, "%d", fileInfo.inaltime);
         writeCheck(fd, inaltimeChar, strlen(inaltimeChar));
         writeCheck(fd, "\n", 1);
+        nrLinii++;
 
         writeCheck(fd, "lungime: ", 9);
         char *lungimeChar = (char *) malloc(10 * sizeof(char));
         sprintf(lungimeChar, "%d", fileInfo.lungime);
         writeCheck(fd, lungimeChar, strlen(lungimeChar));
         writeCheck(fd, "\n", 1);
+        nrLinii++;
 
         writeCheck(fd, "Dimensiune: ", 12);
         char *dimensiuneChar = (char *) malloc(10 * sizeof(char));
         sprintf(dimensiuneChar, "%ld", fileInfo.size);
         writeCheck(fd, dimensiuneChar, strlen(dimensiuneChar));
         writeCheck(fd, "\n", 1);
+        nrLinii++;
 
         writeCheck(fd, "Identificatorul utilizatorului: ", 32);
         char *identificatorulUtilizatoruluiChar = (char *) malloc(10 * sizeof(char));
         sprintf(identificatorulUtilizatoruluiChar, "%ld", fileInfo.uid);
         writeCheck(fd, identificatorulUtilizatoruluiChar, strlen(identificatorulUtilizatoruluiChar));
         writeCheck(fd, "\n", 1);
+        nrLinii++;
 
         writeCheck(fd, "Timpul ultimei modificari: ", 27);
         char *timpulUltimeiModificariChar = (char *) malloc(10 * sizeof(char));
         sprintf(timpulUltimeiModificariChar, "%ld", fileInfo.timpulModificarii);
         writeCheck(fd, timpulUltimeiModificariChar, strlen(timpulUltimeiModificariChar));
         writeCheck(fd, "\n", 1);
+        nrLinii++;
 
         writeCheck(fd, "numarul de legaturi: ", 21);
         char *numarulDeLegaturiChar = (char *) malloc(10 * sizeof(char));
         sprintf(numarulDeLegaturiChar, "%d", fileInfo.numarLegaturi);
         writeCheck(fd, numarulDeLegaturiChar, strlen(numarulDeLegaturiChar));
         writeCheck(fd, "\n", 1);
+        nrLinii++;
 
         writeCheck(fd, "Drepturi de acces user: ", 24);
         writeCheck(fd, fileInfo.drepturiUser, 3);
         writeCheck(fd, "\n", 1);
+        nrLinii++;
 
         writeCheck(fd, "Drepturi de acces grup: ", 24);
         writeCheck(fd, fileInfo.drepturiGrup, 3);
         writeCheck(fd, "\n", 1);
+        nrLinii++;
 
         writeCheck(fd, "Drepturi de acces altii: ", 25);
         writeCheck(fd, fileInfo.drepturiAltii, 3);
         writeCheck(fd, "\n\n", 2);
+        nrLinii++;
     }
 
     if (fileInfo.type == 'R') {
         writeCheck(fd, "nume fisier:", 12);
         writeCheck(fd, fileInfo.nume, strlen(fileInfo.nume));
         writeCheck(fd, "\n", 1);
+        nrLinii++;
 
         writeCheck(fd, "Dimensiune: ", 12);
         char *dimensiuneChar = (char *) malloc(10 * sizeof(char));
         sprintf(dimensiuneChar, "%ld", fileInfo.size);
         writeCheck(fd, dimensiuneChar, strlen(dimensiuneChar));
         writeCheck(fd, "\n", 1);
+        nrLinii++;
 
         writeCheck(fd, "Identificatorul utilizatorului: ", 32);
         char *identificatorulUtilizatoruluiChar = (char *) malloc(10 * sizeof(char));
         sprintf(identificatorulUtilizatoruluiChar, "%ld", fileInfo.uid);
         writeCheck(fd, identificatorulUtilizatoruluiChar, strlen(identificatorulUtilizatoruluiChar));
         writeCheck(fd, "\n", 1);
+        nrLinii++;
 
         writeCheck(fd, "Timpul ultimei modificari: ", 27);
         char *timpulUltimeiModificariChar = (char *) malloc(10 * sizeof(char));
         sprintf(timpulUltimeiModificariChar, "%ld", fileInfo.timpulModificarii);
         writeCheck(fd, timpulUltimeiModificariChar, strlen(timpulUltimeiModificariChar));
         writeCheck(fd, "\n", 1);
+        nrLinii++;
 
         writeCheck(fd, "numarul de legaturi: ", 21);
         char *numarulDeLegaturiChar = (char *) malloc(10 * sizeof(char));
         sprintf(numarulDeLegaturiChar, "%d", fileInfo.numarLegaturi);
         writeCheck(fd, numarulDeLegaturiChar, strlen(numarulDeLegaturiChar));
         writeCheck(fd, "\n", 1);
+        nrLinii++;
 
         writeCheck(fd, "Drepturi de acces user: ", 24);
         writeCheck(fd, fileInfo.drepturiUser, 3);
         writeCheck(fd, "\n", 1);
+        nrLinii++;
 
         writeCheck(fd, "Drepturi de acces grup: ", 24);
         writeCheck(fd, fileInfo.drepturiGrup, 3);
         writeCheck(fd, "\n", 1);
+        nrLinii++;
 
         writeCheck(fd, "Drepturi de acces altii: ", 25);
         writeCheck(fd, fileInfo.drepturiAltii, 3);
         writeCheck(fd, "\n\n", 2);
+        nrLinii++;
+
     }
 
     if (fileInfo.type == 'L') {
         writeCheck(fd, "nume legatura: ", 15);
         writeCheck(fd, fileInfo.nume, strlen(fileInfo.nume));
         writeCheck(fd, "\n", 1);
+        nrLinii++;
 
         writeCheck(fd, "dimensiune legatura: ", 21);
         char *dimensiuneChar = (char *) malloc(10 * sizeof(char));
         sprintf(dimensiuneChar, "%ld", fileInfo.size);
         writeCheck(fd, dimensiuneChar, strlen(dimensiuneChar));
         writeCheck(fd, "\n", 1);
+        nrLinii++;
 
         writeCheck(fd, "dimensiune fisier target: ", 26);
         char *dimensiuneFisierTargetChar = (char *) malloc(10 * sizeof(char));
         sprintf(dimensiuneFisierTargetChar, "%ld", fileInfo.size);
         writeCheck(fd, dimensiuneFisierTargetChar, strlen(dimensiuneFisierTargetChar));
         writeCheck(fd, "\n", 1);
+        nrLinii++;
 
         writeCheck(fd, "Drepturi de acces user: ", 24);
         writeCheck(fd, fileInfo.drepturiUser, 3);
         writeCheck(fd, "\n", 1);
+        nrLinii++;
 
         writeCheck(fd, "Drepturi de acces grup: ", 24);
         writeCheck(fd, fileInfo.drepturiGrup, 3);
         writeCheck(fd, "\n", 1);
+        nrLinii++;
 
         writeCheck(fd, "Drepturi de acces altii: ", 25);
         writeCheck(fd, fileInfo.drepturiAltii, 3);
         writeCheck(fd, "\n\n", 2);
+        nrLinii++;
+
     }
 
     if (fileInfo.type == 'D') {
         writeCheck(fd, "nume director: ", 15);
         writeCheck(fd, fileInfo.nume, strlen(fileInfo.nume));
         writeCheck(fd, "\n", 1);
+        nrLinii++;
 
         writeCheck(fd, "Identificatorul utilizatorului: ", 32);
         char *identificatorulUtilizatoruluiChar = (char *) malloc(10 * sizeof(char));
         sprintf(identificatorulUtilizatoruluiChar, "%ld", fileInfo.uid);
         writeCheck(fd, identificatorulUtilizatoruluiChar, strlen(identificatorulUtilizatoruluiChar));
         writeCheck(fd, "\n", 1);
+        nrLinii++;
 
         writeCheck(fd, "Drepturi de acces user: ", 24);
         writeCheck(fd, fileInfo.drepturiUser, 3);
         writeCheck(fd, "\n", 1);
+        nrLinii++;
 
         writeCheck(fd, "Drepturi de acces grup: ", 24);
         writeCheck(fd, fileInfo.drepturiGrup, 3);
         writeCheck(fd, "\n", 1);
+        nrLinii++;
 
         writeCheck(fd, "Drepturi de acces altii: ", 25);
         writeCheck(fd, fileInfo.drepturiAltii, 3);
         writeCheck(fd, "\n\n", 2);
+        nrLinii++;
     }
 
     close(fd);
+    exit(nrLinii);
 
 }
 
@@ -411,11 +444,12 @@ void printareDateDirector(struct dirent *fisier, char *caleFisier, struct stat s
 
 }
 
-void printareDateLink(struct dirent *fisier, char *caleFisier, struct stat statFisier) {
-    int fisierIesire = open("statistica.txt", O_WRONLY | O_CREAT | O_APPEND, 0644);
-    if (fisierIesire == -1) {
-        error("Eroare deschidere fisier iesire");
-    }
+void printareDateLink(struct dirent *fisier, char *caleFisier, struct stat statFisier, char *fisierIesire) {
+    char *caleFinal = malloc(100);
+    strcpy(caleFinal, fisierIesire);
+    strcat(caleFinal, "/");
+    strcat(caleFinal, fisier->d_name);
+    strcat(caleFinal, "_statistica.txt");
 
     FileInfo fileInfo;
     strcpy(fileInfo.nume, fisier->d_name);
@@ -469,9 +503,7 @@ void printareDateLink(struct dirent *fisier, char *caleFisier, struct stat statF
     }
     fileInfo.type = 'L';
 
-    printareStatistica(fileInfo, "statistica.txt");
-
-    close(fisierIesire);
+    printareStatistica(fileInfo, caleFinal);
 }
 
 void decizieFisier(struct dirent *fisier, char *caleFisier, char *fisierIesire) {
@@ -493,7 +525,7 @@ void decizieFisier(struct dirent *fisier, char *caleFisier, char *fisierIesire) 
 
         if (S_ISLNK(statFisier.st_mode)) {
             printf("%s este un Link\n\n", fisier->d_name);
-            printareDateLink(fisier, caleFisier, statFisier);
+            printareDateLink(fisier, caleFisier, statFisier, fisierIesire);
         } else if (S_ISDIR(statFisier.st_mode)) {
             printf("%s este un Director\n\n", fisier->d_name);
             printareDateDirector(fisier, caleFisier, statFisier);
@@ -517,7 +549,7 @@ void decizieFisier(struct dirent *fisier, char *caleFisier, char *fisierIesire) 
         int status;
         waitpid(pid, &status, 0);
         if (WIFEXITED(status)) {
-            printf("Procesul copil a terminat cu codul de iesire %d\n", WEXITSTATUS(status));
+            printf("Procesul copil a terminat cu codul de iesire %d\n\n", WEXITSTATUS(status));
         } else {
             printf("Procesul copil a terminat cu eroare\n");
         }
