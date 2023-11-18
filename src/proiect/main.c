@@ -24,64 +24,60 @@ typedef struct {
     // Type of file ('B' for BMP, 'D' for Directory, 'L' for Link, 'R' for Regular, 'O' for Others)
 } FileInfo;
 
-void error(char *msg)
-{
+void error(char *msg) {
     perror(msg);
     exit(1);
 }
 
-void writeCheck(int fd, char *buffer, unsigned long size)
-{
-    if (write(fd, buffer, size) == -1)
-    {
+void writeCheck(int fd, char *buffer, unsigned long size) {
+    if (write(fd, buffer, size) == -1) {
         error("Eroare scriere");
     }
 }
 
-void printareStatistica(FileInfo fileInfo, char *fisierIesire){
+void printareStatistica(FileInfo fileInfo, char *fisierIesire) {
     int fd;
-    if ((fd = open(fisierIesire, O_WRONLY | O_CREAT | O_APPEND, 0644)) == -1)
-    {
+    if ((fd = open(fisierIesire, O_WRONLY | O_CREAT | O_APPEND, 0644)) == -1) {
         error("Eroare deschidere fisier iesire");
     }
 
-    if(fileInfo.type == 'B'){
+    if (fileInfo.type == 'B') {
         writeCheck(fd, "nume fisier:", 12);
         writeCheck(fd, fileInfo.nume, strlen(fileInfo.nume));
         writeCheck(fd, "\n", 1);
 
         writeCheck(fd, "inaltime: ", 10);
-        char *inaltimeChar = (char *)malloc(10 * sizeof(char));
+        char *inaltimeChar = (char *) malloc(10 * sizeof(char));
         sprintf(inaltimeChar, "%d", fileInfo.inaltime);
         writeCheck(fd, inaltimeChar, strlen(inaltimeChar));
         writeCheck(fd, "\n", 1);
 
         writeCheck(fd, "lungime: ", 9);
-        char *lungimeChar = (char *)malloc(10 * sizeof(char));
+        char *lungimeChar = (char *) malloc(10 * sizeof(char));
         sprintf(lungimeChar, "%d", fileInfo.lungime);
         writeCheck(fd, lungimeChar, strlen(lungimeChar));
         writeCheck(fd, "\n", 1);
 
         writeCheck(fd, "Dimensiune: ", 12);
-        char *dimensiuneChar = (char *)malloc(10 * sizeof(char));
+        char *dimensiuneChar = (char *) malloc(10 * sizeof(char));
         sprintf(dimensiuneChar, "%ld", fileInfo.size);
         writeCheck(fd, dimensiuneChar, strlen(dimensiuneChar));
         writeCheck(fd, "\n", 1);
 
         writeCheck(fd, "Identificatorul utilizatorului: ", 32);
-        char *identificatorulUtilizatoruluiChar = (char *)malloc(10 * sizeof(char));
+        char *identificatorulUtilizatoruluiChar = (char *) malloc(10 * sizeof(char));
         sprintf(identificatorulUtilizatoruluiChar, "%ld", fileInfo.uid);
         writeCheck(fd, identificatorulUtilizatoruluiChar, strlen(identificatorulUtilizatoruluiChar));
         writeCheck(fd, "\n", 1);
 
         writeCheck(fd, "Timpul ultimei modificari: ", 27);
-        char *timpulUltimeiModificariChar = (char *)malloc(10 * sizeof(char));
+        char *timpulUltimeiModificariChar = (char *) malloc(10 * sizeof(char));
         sprintf(timpulUltimeiModificariChar, "%ld", fileInfo.timpulModificarii);
         writeCheck(fd, timpulUltimeiModificariChar, strlen(timpulUltimeiModificariChar));
         writeCheck(fd, "\n", 1);
 
         writeCheck(fd, "numarul de legaturi: ", 21);
-        char *numarulDeLegaturiChar = (char *)malloc(10 * sizeof(char));
+        char *numarulDeLegaturiChar = (char *) malloc(10 * sizeof(char));
         sprintf(numarulDeLegaturiChar, "%d", fileInfo.numarLegaturi);
         writeCheck(fd, numarulDeLegaturiChar, strlen(numarulDeLegaturiChar));
         writeCheck(fd, "\n", 1);
@@ -99,31 +95,31 @@ void printareStatistica(FileInfo fileInfo, char *fisierIesire){
         writeCheck(fd, "\n\n", 2);
     }
 
-    if(fileInfo.type=='R'){
+    if (fileInfo.type == 'R') {
         writeCheck(fd, "nume fisier:", 12);
         writeCheck(fd, fileInfo.nume, strlen(fileInfo.nume));
         writeCheck(fd, "\n", 1);
 
         writeCheck(fd, "Dimensiune: ", 12);
-        char *dimensiuneChar = (char *)malloc(10 * sizeof(char));
+        char *dimensiuneChar = (char *) malloc(10 * sizeof(char));
         sprintf(dimensiuneChar, "%ld", fileInfo.size);
         writeCheck(fd, dimensiuneChar, strlen(dimensiuneChar));
         writeCheck(fd, "\n", 1);
 
         writeCheck(fd, "Identificatorul utilizatorului: ", 32);
-        char *identificatorulUtilizatoruluiChar = (char *)malloc(10 * sizeof(char));
+        char *identificatorulUtilizatoruluiChar = (char *) malloc(10 * sizeof(char));
         sprintf(identificatorulUtilizatoruluiChar, "%ld", fileInfo.uid);
         writeCheck(fd, identificatorulUtilizatoruluiChar, strlen(identificatorulUtilizatoruluiChar));
         writeCheck(fd, "\n", 1);
 
         writeCheck(fd, "Timpul ultimei modificari: ", 27);
-        char *timpulUltimeiModificariChar = (char *)malloc(10 * sizeof(char));
+        char *timpulUltimeiModificariChar = (char *) malloc(10 * sizeof(char));
         sprintf(timpulUltimeiModificariChar, "%ld", fileInfo.timpulModificarii);
         writeCheck(fd, timpulUltimeiModificariChar, strlen(timpulUltimeiModificariChar));
         writeCheck(fd, "\n", 1);
 
         writeCheck(fd, "numarul de legaturi: ", 21);
-        char *numarulDeLegaturiChar = (char *)malloc(10 * sizeof(char));
+        char *numarulDeLegaturiChar = (char *) malloc(10 * sizeof(char));
         sprintf(numarulDeLegaturiChar, "%d", fileInfo.numarLegaturi);
         writeCheck(fd, numarulDeLegaturiChar, strlen(numarulDeLegaturiChar));
         writeCheck(fd, "\n", 1);
@@ -141,19 +137,19 @@ void printareStatistica(FileInfo fileInfo, char *fisierIesire){
         writeCheck(fd, "\n\n", 2);
     }
 
-    if(fileInfo.type == 'L'){
+    if (fileInfo.type == 'L') {
         writeCheck(fd, "nume legatura: ", 15);
         writeCheck(fd, fileInfo.nume, strlen(fileInfo.nume));
         writeCheck(fd, "\n", 1);
 
         writeCheck(fd, "dimensiune legatura: ", 21);
-        char *dimensiuneChar = (char *)malloc(10 * sizeof(char));
+        char *dimensiuneChar = (char *) malloc(10 * sizeof(char));
         sprintf(dimensiuneChar, "%ld", fileInfo.size);
         writeCheck(fd, dimensiuneChar, strlen(dimensiuneChar));
         writeCheck(fd, "\n", 1);
 
         writeCheck(fd, "dimensiune fisier target: ", 26);
-        char *dimensiuneFisierTargetChar = (char *)malloc(10 * sizeof(char));
+        char *dimensiuneFisierTargetChar = (char *) malloc(10 * sizeof(char));
         sprintf(dimensiuneFisierTargetChar, "%ld", fileInfo.size);
         writeCheck(fd, dimensiuneFisierTargetChar, strlen(dimensiuneFisierTargetChar));
         writeCheck(fd, "\n", 1);
@@ -171,13 +167,13 @@ void printareStatistica(FileInfo fileInfo, char *fisierIesire){
         writeCheck(fd, "\n\n", 2);
     }
 
-    if(fileInfo.type == 'D'){
+    if (fileInfo.type == 'D') {
         writeCheck(fd, "nume director: ", 15);
         writeCheck(fd, fileInfo.nume, strlen(fileInfo.nume));
         writeCheck(fd, "\n", 1);
 
         writeCheck(fd, "Identificatorul utilizatorului: ", 32);
-        char *identificatorulUtilizatoruluiChar = (char *)malloc(10 * sizeof(char));
+        char *identificatorulUtilizatoruluiChar = (char *) malloc(10 * sizeof(char));
         sprintf(identificatorulUtilizatoruluiChar, "%ld", fileInfo.uid);
         writeCheck(fd, identificatorulUtilizatoruluiChar, strlen(identificatorulUtilizatoruluiChar));
         writeCheck(fd, "\n", 1);
@@ -199,100 +195,71 @@ void printareStatistica(FileInfo fileInfo, char *fisierIesire){
 
 }
 
-void printareDateBMP(struct dirent *fisier, char *caleFisier, struct stat statFisier){
+void printareDateBMP(struct dirent *fisier, char *caleFisier, struct stat statFisier) {
     int fd;
     char caleNoua[100];
     strcpy(caleNoua, caleFisier);
     strcat(caleNoua, "/");
     strcat(caleNoua, fisier->d_name);
-    if ((fd = open(caleNoua, O_RDONLY)) == -1)
-    {
+    if ((fd = open(caleNoua, O_RDONLY)) == -1) {
         error("Eroare deschidere fisier intrare");
     }
-    char *header = (char *)malloc(54 * sizeof(char));
-    if (read(fd, header, 54) == -1)
-    {
+    char *header = (char *) malloc(54 * sizeof(char));
+    if (read(fd, header, 54) == -1) {
         error("Eroare citire header");
     }
 
     FileInfo fileInfo;
     strcpy(fileInfo.nume, fisier->d_name);
-    fileInfo.inaltime = *(int *)(header + 22);
-    fileInfo.lungime = *(int *)(header + 18);
-    fileInfo.size = *(int *)(header + 2);
+    fileInfo.inaltime = *(int *) (header + 22);
+    fileInfo.lungime = *(int *) (header + 18);
+    fileInfo.size = *(int *) (header + 2);
     fileInfo.uid = statFisier.st_uid;
     fileInfo.timpulModificarii = statFisier.st_mtime;
     fileInfo.numarLegaturi = statFisier.st_nlink;
-    if (statFisier.st_mode & S_IRUSR)
-    {
+    if (statFisier.st_mode & S_IRUSR) {
         fileInfo.drepturiUser[0] = 'r';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiUser[0] = '-';
     }
-    if (statFisier.st_mode & S_IWUSR)
-    {
+    if (statFisier.st_mode & S_IWUSR) {
         fileInfo.drepturiUser[1] = 'w';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiUser[1] = '-';
     }
-    if (statFisier.st_mode & S_IXUSR)
-    {
+    if (statFisier.st_mode & S_IXUSR) {
         fileInfo.drepturiUser[2] = 'x';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiUser[2] = '-';
     }
-    if (statFisier.st_mode & S_IRGRP)
-    {
+    if (statFisier.st_mode & S_IRGRP) {
         fileInfo.drepturiGrup[0] = 'r';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiGrup[0] = '-';
     }
-    if (statFisier.st_mode & S_IWGRP)
-    {
+    if (statFisier.st_mode & S_IWGRP) {
         fileInfo.drepturiGrup[1] = 'w';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiGrup[1] = '-';
     }
-    if (statFisier.st_mode & S_IXGRP)
-    {
+    if (statFisier.st_mode & S_IXGRP) {
         fileInfo.drepturiGrup[2] = 'x';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiGrup[2] = '-';
     }
-    if (statFisier.st_mode & S_IROTH)
-    {
+    if (statFisier.st_mode & S_IROTH) {
         fileInfo.drepturiAltii[0] = 'r';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiAltii[0] = '-';
     }
-    if (statFisier.st_mode & S_IWOTH)
-    {
+    if (statFisier.st_mode & S_IWOTH) {
         fileInfo.drepturiAltii[1] = 'w';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiAltii[1] = '-';
     }
-    if (statFisier.st_mode & S_IXOTH)
-    {
+    if (statFisier.st_mode & S_IXOTH) {
         fileInfo.drepturiAltii[2] = 'x';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiAltii[2] = '-';
     }
     fileInfo.type = 'B';
@@ -303,20 +270,18 @@ void printareDateBMP(struct dirent *fisier, char *caleFisier, struct stat statFi
 
 }
 
-void printareDateRegulareNuBMP(struct dirent *fisier, char *caleFisier, struct stat statFisier){
+void printareDateRegulareNuBMP(struct dirent *fisier, char *caleFisier, struct stat statFisier) {
     int fd;
     char caleNoua[100];
     strcpy(caleNoua, caleFisier);
     strcat(caleNoua, "/");
     strcat(caleNoua, fisier->d_name);
-    if ((fd = open(caleNoua, O_RDONLY)) == -1)
-    {
+    if ((fd = open(caleNoua, O_RDONLY)) == -1) {
         error("Eroare deschidere fisier intrare");
     }
 
     int fisierIesire = open("statistica.txt", O_WRONLY | O_CREAT | O_APPEND, 0644);
-    if (fisierIesire == -1)
-    {
+    if (fisierIesire == -1) {
         error("Eroare deschidere fisier iesire");
     }
 
@@ -326,76 +291,49 @@ void printareDateRegulareNuBMP(struct dirent *fisier, char *caleFisier, struct s
     fileInfo.uid = statFisier.st_uid;
     fileInfo.timpulModificarii = statFisier.st_mtime;
     fileInfo.numarLegaturi = statFisier.st_nlink;
-    if (statFisier.st_mode & S_IRUSR)
-    {
+    if (statFisier.st_mode & S_IRUSR) {
         fileInfo.drepturiUser[0] = 'r';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiUser[0] = '-';
     }
-    if (statFisier.st_mode & S_IWUSR)
-    {
+    if (statFisier.st_mode & S_IWUSR) {
         fileInfo.drepturiUser[1] = 'w';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiUser[1] = '-';
     }
-    if (statFisier.st_mode & S_IXUSR)
-    {
+    if (statFisier.st_mode & S_IXUSR) {
         fileInfo.drepturiUser[2] = 'x';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiUser[2] = '-';
     }
-    if (statFisier.st_mode & S_IRGRP)
-    {
+    if (statFisier.st_mode & S_IRGRP) {
         fileInfo.drepturiGrup[0] = 'r';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiGrup[0] = '-';
     }
-    if (statFisier.st_mode & S_IWGRP)
-    {
+    if (statFisier.st_mode & S_IWGRP) {
         fileInfo.drepturiGrup[1] = 'w';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiGrup[1] = '-';
     }
-    if (statFisier.st_mode & S_IXGRP)
-    {
+    if (statFisier.st_mode & S_IXGRP) {
         fileInfo.drepturiGrup[2] = 'x';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiGrup[2] = '-';
     }
-    if (statFisier.st_mode & S_IROTH)
-    {
+    if (statFisier.st_mode & S_IROTH) {
         fileInfo.drepturiAltii[0] = 'r';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiAltii[0] = '-';
     }
-    if (statFisier.st_mode & S_IWOTH)
-    {
+    if (statFisier.st_mode & S_IWOTH) {
         fileInfo.drepturiAltii[1] = 'w';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiAltii[1] = '-';
     }
-    if (statFisier.st_mode & S_IXOTH)
-    {
+    if (statFisier.st_mode & S_IXOTH) {
         fileInfo.drepturiAltii[2] = 'x';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiAltii[2] = '-';
     }
     fileInfo.type = 'R';
@@ -406,14 +344,13 @@ void printareDateRegulareNuBMP(struct dirent *fisier, char *caleFisier, struct s
 
 }
 
-void printareDateDirector(struct dirent *fisier, char *caleFisier, struct stat statFisier){
+void printareDateDirector(struct dirent *fisier, char *caleFisier, struct stat statFisier) {
     int fd;
     char caleNoua[100];
     strcpy(caleNoua, caleFisier);
     strcat(caleNoua, "/");
     strcat(caleNoua, fisier->d_name);
-    if ((fd = open(caleNoua, O_RDONLY)) == -1)
-    {
+    if ((fd = open(caleNoua, O_RDONLY)) == -1) {
         error("Eroare deschidere fisier intrare");
     }
 
@@ -421,76 +358,49 @@ void printareDateDirector(struct dirent *fisier, char *caleFisier, struct stat s
     strcpy(fileInfo.nume, fisier->d_name);
     fileInfo.uid = statFisier.st_uid;
     fileInfo.numarLegaturi = statFisier.st_nlink;
-    if (statFisier.st_mode & S_IRUSR)
-    {
+    if (statFisier.st_mode & S_IRUSR) {
         fileInfo.drepturiUser[0] = 'r';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiUser[0] = '-';
     }
-    if (statFisier.st_mode & S_IWUSR)
-    {
+    if (statFisier.st_mode & S_IWUSR) {
         fileInfo.drepturiUser[1] = 'w';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiUser[1] = '-';
     }
-    if (statFisier.st_mode & S_IXUSR)
-    {
+    if (statFisier.st_mode & S_IXUSR) {
         fileInfo.drepturiUser[2] = 'x';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiUser[2] = '-';
     }
-    if (statFisier.st_mode & S_IRGRP)
-    {
+    if (statFisier.st_mode & S_IRGRP) {
         fileInfo.drepturiGrup[0] = 'r';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiGrup[0] = '-';
     }
-    if (statFisier.st_mode & S_IWGRP)
-    {
+    if (statFisier.st_mode & S_IWGRP) {
         fileInfo.drepturiGrup[1] = 'w';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiGrup[1] = '-';
     }
-    if (statFisier.st_mode & S_IXGRP)
-    {
+    if (statFisier.st_mode & S_IXGRP) {
         fileInfo.drepturiGrup[2] = 'x';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiGrup[2] = '-';
     }
-    if (statFisier.st_mode & S_IROTH)
-    {
+    if (statFisier.st_mode & S_IROTH) {
         fileInfo.drepturiAltii[0] = 'r';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiAltii[0] = '-';
     }
-    if (statFisier.st_mode & S_IWOTH)
-    {
+    if (statFisier.st_mode & S_IWOTH) {
         fileInfo.drepturiAltii[1] = 'w';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiAltii[1] = '-';
     }
-    if (statFisier.st_mode & S_IXOTH)
-    {
+    if (statFisier.st_mode & S_IXOTH) {
         fileInfo.drepturiAltii[2] = 'x';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiAltii[2] = '-';
     }
     fileInfo.type = 'D';
@@ -501,10 +411,9 @@ void printareDateDirector(struct dirent *fisier, char *caleFisier, struct stat s
 
 }
 
-void printareDateLink(struct dirent *fisier, char *caleFisier, struct stat statFisier){
+void printareDateLink(struct dirent *fisier, char *caleFisier, struct stat statFisier) {
     int fisierIesire = open("statistica.txt", O_WRONLY | O_CREAT | O_APPEND, 0644);
-    if (fisierIesire == -1)
-    {
+    if (fisierIesire == -1) {
         error("Eroare deschidere fisier iesire");
     }
 
@@ -513,76 +422,49 @@ void printareDateLink(struct dirent *fisier, char *caleFisier, struct stat statF
     fileInfo.size = statFisier.st_size;
     fileInfo.uid = statFisier.st_uid;
     fileInfo.numarLegaturi = statFisier.st_nlink;
-    if (statFisier.st_mode & S_IRUSR)
-    {
+    if (statFisier.st_mode & S_IRUSR) {
         fileInfo.drepturiUser[0] = 'r';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiUser[0] = '-';
     }
-    if (statFisier.st_mode & S_IWUSR)
-    {
+    if (statFisier.st_mode & S_IWUSR) {
         fileInfo.drepturiUser[1] = 'w';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiUser[1] = '-';
     }
-    if (statFisier.st_mode & S_IXUSR)
-    {
+    if (statFisier.st_mode & S_IXUSR) {
         fileInfo.drepturiUser[2] = 'x';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiUser[2] = '-';
     }
-    if (statFisier.st_mode & S_IRGRP)
-    {
+    if (statFisier.st_mode & S_IRGRP) {
         fileInfo.drepturiGrup[0] = 'r';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiGrup[0] = '-';
     }
-    if (statFisier.st_mode & S_IWGRP)
-    {
+    if (statFisier.st_mode & S_IWGRP) {
         fileInfo.drepturiGrup[1] = 'w';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiGrup[1] = '-';
     }
-    if (statFisier.st_mode & S_IXGRP)
-    {
+    if (statFisier.st_mode & S_IXGRP) {
         fileInfo.drepturiGrup[2] = 'x';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiGrup[2] = '-';
     }
-    if (statFisier.st_mode & S_IROTH)
-    {
+    if (statFisier.st_mode & S_IROTH) {
         fileInfo.drepturiAltii[0] = 'r';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiAltii[0] = '-';
     }
-    if (statFisier.st_mode & S_IWOTH)
-    {
+    if (statFisier.st_mode & S_IWOTH) {
         fileInfo.drepturiAltii[1] = 'w';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiAltii[1] = '-';
     }
-    if (statFisier.st_mode & S_IXOTH)
-    {
+    if (statFisier.st_mode & S_IXOTH) {
         fileInfo.drepturiAltii[2] = 'x';
-    }
-    else
-    {
+    } else {
         fileInfo.drepturiAltii[2] = '-';
     }
     fileInfo.type = 'L';
@@ -592,14 +474,12 @@ void printareDateLink(struct dirent *fisier, char *caleFisier, struct stat statF
     close(fisierIesire);
 }
 
-void decizieFisier(struct dirent *fisier, char *caleFisier)
-{
+void decizieFisier(struct dirent *fisier, char *caleFisier, char *fisierIesire) {
     pid_t pid;
     pid = fork();
-    if(pid == -1){
+    if (pid == -1) {
         error("Eroare fork");
-    }
-    else if (pid == 0){
+    } else if (pid == 0) {
         //Proces child
         struct stat statFisier;
         char caleNoua[100];
@@ -607,51 +487,38 @@ void decizieFisier(struct dirent *fisier, char *caleFisier)
         strcat(caleNoua, "/");
         strcat(caleNoua, fisier->d_name);
 
-        if (lstat(caleNoua, &statFisier) == -1)
-        {
+        if (lstat(caleNoua, &statFisier) == -1) {
             error("Eroare lstat");
         }
 
-        if (S_ISLNK(statFisier.st_mode))
-        {
+        if (S_ISLNK(statFisier.st_mode)) {
             printf("%s este un Link\n\n", fisier->d_name);
             printareDateLink(fisier, caleFisier, statFisier);
-        }
-        else if (S_ISDIR(statFisier.st_mode))
-        {
+        } else if (S_ISDIR(statFisier.st_mode)) {
             printf("%s este un Director\n\n", fisier->d_name);
             printareDateDirector(fisier, caleFisier, statFisier);
-        }
-        else if (S_ISREG(statFisier.st_mode))
-        {
+        } else if (S_ISREG(statFisier.st_mode)) {
             char *extensie = strrchr(fisier->d_name, '.');
-            if (extensie != NULL && strcmp(extensie, ".bmp") == 0)
-            {
+            if (extensie != NULL && strcmp(extensie, ".bmp") == 0) {
                 printf("Fisierul %s este un .bmp\n\n", fisier->d_name);
                 printareDateBMP(fisier, caleFisier, statFisier);
-            }
-            else
-            {
+            } else {
                 printf("Fisierul %s nu este un .bmp\n\n", fisier->d_name);
                 printareDateRegulareNuBMP(fisier, caleFisier, statFisier);
             }
-        }
-        else
-        {
+        } else {
             printf("%s este Altceva\n\n", fisier->d_name);
         }
 
         exit(0);//terminam procesul copil daca nu a fost terminat pana acum
-    }
-    else if(pid > 0){
+    } else if (pid > 0) {
         //proces parinte
         printf("Asteptam procesul copil...\n");
         int status;
         waitpid(pid, &status, 0);
-        if(WIFEXITED(status)){
+        if (WIFEXITED(status)) {
             printf("Procesul copil a terminat cu codul de iesire %d\n", WEXITSTATUS(status));
-        }
-        else{
+        } else {
             printf("Procesul copil a terminat cu eroare\n");
         }
     }
@@ -659,29 +526,24 @@ void decizieFisier(struct dirent *fisier, char *caleFisier)
 }
 
 
-int main(int argc, char **argv)
-{
-    if (argc != 2)
-    {
+int main(int argc, char **argv) {
+    if (argc != 3) {
         printf("Numar invalid argumente!");
         exit(1);
     }
 
     DIR *director;
     struct dirent *directorStruct;
-    if ((director = opendir(argv[1])) == NULL)
-    {
+    if ((director = opendir(argv[1])) == NULL) {
         error("Eroare deschidere fisier intrare");
     }
 
-    while ((directorStruct = readdir(director)) != NULL)
-    {
+    while ((directorStruct = readdir(director)) != NULL) {
         // Ignoram directorul curent si parintele
-        if (strcmp(directorStruct->d_name, ".") == 0 || strcmp(directorStruct->d_name, "..") == 0)
-        {
+        if (strcmp(directorStruct->d_name, ".") == 0 || strcmp(directorStruct->d_name, "..") == 0) {
             continue;
         }
-        decizieFisier(directorStruct, argv[1]);
+        decizieFisier(directorStruct, argv[1], argv[2]);
     }
 
 

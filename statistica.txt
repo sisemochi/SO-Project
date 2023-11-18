@@ -97,3 +97,36 @@ Drepturi de acces user: rwx
 Drepturi de acces grup: r-x
 Drepturi de acces altii: r-x
 
+nume legatura: link
+dimensiune legatura: 8
+dimensiune fisier target: 8
+Drepturi de acces user: rwx
+Drepturi de acces grup: r-x
+Drepturi de acces altii: r-x
+
+nume fisier:imagine.bmp
+inaltime: 1280
+lungime: 1920
+Dimensiune: 7372938
+Identificatorul utilizatorului: 501
+Timpul ultimei modificari: 1699564542
+numarul de legaturi: 1
+Drepturi de acces user: rw-
+Drepturi de acces grup: r--
+Drepturi de acces altii: r--
+
+nume fisier:text.txt
+Dimensiune: 13
+Identificatorul utilizatorului: 501
+Timpul ultimei modificari: 1699564542
+numarul de legaturi: 1
+Drepturi de acces user: rw-
+Drepturi de acces grup: r--
+Drepturi de acces altii: r--
+
+nume director: DirectorSecundar
+Identificatorul utilizatorului: 501
+Drepturi de acces user: rwx
+Drepturi de acces grup: r-x
+Drepturi de acces altii: r-x
+
