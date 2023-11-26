@@ -20,14 +20,8 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="72a5c6e6-10dd-4165-9cdf-fefbe4c196bb" name="Changes" comment="fix fisiere">
+    <list default="true" id="72a5c6e6-10dd-4165-9cdf-fefbe4c196bb" name="Changes" comment="implementare .bmp alb-negru">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Statistici/DirectorSecundar_statistica.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Statistici/imagine.bmp_statistica.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Statistici/link_statistica.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Statistici/text.txt_statistica.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Testing/imagine.bmp" beforeDir="false" afterPath="$PROJECT_DIR$/Testing/imagine.bmp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main" beforeDir="false" afterPath="$PROJECT_DIR$/main" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/proiect/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/proiect/main.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -109,7 +103,8 @@
       <workItem from="1699885838023" duration="2775000" />
       <workItem from="1700064093025" duration="22000" />
       <workItem from="1700305534014" duration="50000" />
-      <workItem from="1700305602618" duration="3589000" />
+      <workItem from="1700305602618" duration="4162000" />
+      <workItem from="1701017167607" duration="759000" />
     </task>
     <task id="LOCAL-00001" summary="modificare nume">
       <option name="closed" value="true" />
@@ -167,7 +162,15 @@
       <option name="project" value="LOCAL" />
       <updated>1700310540749</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="implementare .bmp alb-negru">
+      <option name="closed" value="true" />
+      <created>1700311501771</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1700311501771</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -198,6 +201,7 @@
     <MESSAGE value="implementare exit codes si statistica pentru link-uri" />
     <MESSAGE value="implementare fisiere statistica" />
     <MESSAGE value="fix fisiere" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix fisiere" />
+    <MESSAGE value="implementare .bmp alb-negru" />
+    <option name="LAST_COMMIT_MESSAGE" value="implementare .bmp alb-negru" />
   </component>
 </project>

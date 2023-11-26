@@ -6,3 +6,7 @@ link 6
 imagine.bmp 10
 text.txt 8
 DirectorSecundar 5
+link 6
+imagine.bmp 10
+text.txt 8
+DirectorSecundar 5

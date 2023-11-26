@@ -185,6 +185,36 @@ void printareStatistica(FileInfo fileInfo, char *fisierIesire) {
         writeCheck(fd, "\n\n", 2);
         nrLinii++;
 
+        int fd2[2]; // fd2[0] - citire, fd2[1] - scriere
+        if (pipe(fd2) == -1) {
+            error("Eroare pipe");
+        }
+
+        pid_t pid;
+        pid = fork();
+        if (pid == -1) {
+            error("Eroare fork");
+        } else if (pid == 0) {
+            //Proces child
+            //todo - implementare apel shell script de la punctul A, + scriere in pipe
+            //ce este jos este doar un exemplu
+            close(fd2[0]);
+            dup2(fd2[1], STDOUT_FILENO);
+            char *comanda = malloc(100);
+            strcpy(comanda, "file ");
+            strcat(comanda, fileInfo.nume);
+            system(comanda);
+            close(fd2[1]);
+            exit(0);
+        } else if (pid > 0) {
+            //proces parinte
+            close(fd2[1]);
+            char buffer[100];
+            read(fd2[0], buffer, sizeof(buffer));
+            write(fd, buffer, strlen(buffer));
+            close(fd2[0]);
+        }
+
     }
 
     if (fileInfo.type == 'L') {
