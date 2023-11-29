@@ -65,7 +65,7 @@ void writeCheck(int fd, char *buffer, unsigned long size) {
     }
 }
 
-void printareStatistica(FileInfo fileInfo, char *fisierIesire) {
+void printareStatistica(FileInfo fileInfo, char *fisierIesire, char *caracter) {
     int fd;
     if ((fd = open(fisierIesire, O_WRONLY | O_CREAT | O_APPEND, 0644)) == -1) {
         error("Eroare deschidere fisier iesire");
@@ -190,31 +190,47 @@ void printareStatistica(FileInfo fileInfo, char *fisierIesire) {
             error("Eroare pipe");
         }
 
+        int fd_stdin[2]; // Pipe pentru script
+        if (pipe(fd_stdin) == -1) {
+            perror("pipe");
+            exit(1);
+        }
+
         pid_t pid;
         pid = fork();
         if (pid == -1) {
             error("Eroare fork");
         } else if (pid == 0) {
-            //Proces child
-            //todo - implementare apel shell script de la punctul A, + scriere in pipe
-            //ce este jos este doar un exemplu
-            close(fd2[0]);
-            dup2(fd2[1], STDOUT_FILENO);
-            char *comanda = malloc(100);
-            strcpy(comanda, "file ");
-            strcat(comanda, fileInfo.nume);
-            system(comanda);
-            close(fd2[1]);
-            exit(0);
-        } else if (pid > 0) {
-            //proces parinte
-            close(fd2[1]);
-            char buffer[100];
-            read(fd2[0], buffer, sizeof(buffer));
-            write(fd, buffer, strlen(buffer));
-            close(fd2[0]);
-        }
+            // proces child
 
+            close(fd2[0]); // inchide citirea din pipe
+            close(fd_stdin[1]); // inchide scrierea in pipe a scriptului
+
+            dup2(fd2[1], STDOUT_FILENO);
+            dup2(fd_stdin[0], STDIN_FILENO);
+            close(fd2[1]); // inchide scriere in pipe
+            close(fd_stdin[0]); // inchide citirea din pipe a scriptului
+
+            execlp("/bin/zsh", "zsh", "./src/proiect/propozitii.sh", caracter, (char *) NULL);
+
+            // daca ajunge aici, inseamna ca nu s-a putut executa scriptul
+            perror("execlp");
+            exit(1);
+        } else if (pid > 0) {
+            // proces parinte
+            close(fd2[1]); // inchide scrierea in pipe
+            close(fd_stdin[0]); // inchide citirea din pipe a scriptului
+
+            // scrie in pipe-ul scriptului la stdin
+            write(fd_stdin[1], "Ana are mere.\n", 14);
+            close(fd_stdin[1]); // inchiude scrierea in pipe a scriptului pentru a trimite EOF
+
+            char buffer[100];
+            read(fd2[0], buffer, sizeof(buffer)); // citeste din pipe outputul scriptului
+            printf("\n-------------------------\nOutput comanda: \n%s\n----------------------\n", buffer);
+
+            close(fd2[0]); // inchide citirea din pipe
+        }
     }
 
     if (fileInfo.type == 'L') {
@@ -366,14 +382,15 @@ void printareDateBMP(struct dirent *fisier, char *caleFisier, struct stat statFi
     strcat(caleIesire, fisier->d_name);
     strcat(caleIesire, "_statistica.txt");
 
-
-    printareStatistica(fileInfo, caleIesire);
+    char * dummy = malloc(1);
+    printareStatistica(fileInfo, caleIesire, dummy);
+    free(dummy);
 
     close(fd);
 
 }
 
-void printareDateRegulareNuBMP(struct dirent *fisier, char *caleFisier, struct stat statFisier, char *fisierIesire) {
+void printareDateRegulareNuBMP(struct dirent *fisier, char *caleFisier, struct stat statFisier, char *fisierIesire, char *caracter) {
     int fd;
     char caleNoua[100];
     strcpy(caleNoua, caleFisier);
@@ -442,7 +459,7 @@ void printareDateRegulareNuBMP(struct dirent *fisier, char *caleFisier, struct s
     strcat(caleIesire, fisier->d_name);
     strcat(caleIesire, "_statistica.txt");
 
-    printareStatistica(fileInfo, caleIesire);
+    printareStatistica(fileInfo, caleIesire, caracter);
 
     close(fd);
 
@@ -515,7 +532,9 @@ void printareDateDirector(struct dirent *fisier, char *caleFisier, struct stat s
     strcat(caleIesire, fisier->d_name);
     strcat(caleIesire, "_statistica.txt");
 
-    printareStatistica(fileInfo, caleIesire);
+    char *dummy = malloc(1);
+    printareStatistica(fileInfo, caleIesire, dummy);
+    free(dummy);
 
     close(fd);
 
@@ -580,10 +599,12 @@ void printareDateLink(struct dirent *fisier, char *caleFisier, struct stat statF
     }
     fileInfo.type = 'L';
 
-    printareStatistica(fileInfo, caleFinal);
+    char *dummy = malloc(1);
+    printareStatistica(fileInfo, caleFinal, dummy);
+    free(dummy);
 }
 
-void decizieFisier(struct dirent *fisier, char *caleFisier, char *fisierIesire) {
+void decizieFisier(struct dirent *fisier, char *caleFisier, char *fisierIesire, char *caracter) {
     pid_t pid;
     pid = fork();
     if (pid == -1) {
@@ -613,7 +634,7 @@ void decizieFisier(struct dirent *fisier, char *caleFisier, char *fisierIesire) 
                 printareDateBMP(fisier, caleFisier, statFisier, fisierIesire);
             } else {
                 printf("Fisierul %s nu este un .bmp\n\n", fisier->d_name);
-                printareDateRegulareNuBMP(fisier, caleFisier, statFisier, fisierIesire);
+                printareDateRegulareNuBMP(fisier, caleFisier, statFisier, fisierIesire, caracter);
             }
         } else {
             printf("%s este Altceva\n\n", fisier->d_name);
@@ -647,8 +668,9 @@ void decizieFisier(struct dirent *fisier, char *caleFisier, char *fisierIesire) 
 
 
 int main(int argc, char **argv) {
-    if (argc != 3) {
-        printf("Numar invalid argumente!");
+    if (argc != 4) {
+        printf("Numar invalid argumente!\n");
+        printf("Folosire corecta: ./program <cale_fisier_intrare> <cale_fisier_iesire> <caracter>\n");
         exit(1);
     }
 
@@ -663,7 +685,7 @@ int main(int argc, char **argv) {
         if (strcmp(directorStruct->d_name, ".") == 0 || strcmp(directorStruct->d_name, "..") == 0) {
             continue;
         }
-        decizieFisier(directorStruct, argv[1], argv[2]);
+        decizieFisier(directorStruct, argv[1], argv[2], argv[3]);
     }
 
 
