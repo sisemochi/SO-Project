@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 # Verifică dacă scriptul a primit exact un argument
 if [ "$#" -ne 1 ]; then

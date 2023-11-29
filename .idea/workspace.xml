@@ -20,16 +20,8 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="72a5c6e6-10dd-4165-9cdf-fefbe4c196bb" name="Changes" comment="implementare scriere si citire din pipe-uri pentru script propozitii">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Statistici/DirectorSecundar_statistica.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Statistici/DirectorSecundar_statistica.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Statistici/imagine.bmp_statistica.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Statistici/imagine.bmp_statistica.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Statistici/link_statistica.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Statistici/link_statistica.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Statistici/text.txt_statistica.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Statistici/text.txt_statistica.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Testing/imagine.bmp" beforeDir="false" afterPath="$PROJECT_DIR$/Testing/imagine.bmp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main" beforeDir="false" afterPath="$PROJECT_DIR$/main" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/proiect/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/proiect/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/statistica.txt" beforeDir="false" afterPath="$PROJECT_DIR$/statistica.txt" afterDir="false" />
+    <list default="true" id="72a5c6e6-10dd-4165-9cdf-fefbe4c196bb" name="Changes" comment="implementare output script propozitii dupa fisierul de statistica">
+      <change beforePath="$PROJECT_DIR$/src/proiect/propozitii.sh" beforeDir="false" afterPath="$PROJECT_DIR$/src/proiect/propozitii.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,7 +106,7 @@
       <workItem from="1700305534014" duration="50000" />
       <workItem from="1700305602618" duration="4162000" />
       <workItem from="1701017167607" duration="1063000" />
-      <workItem from="1701200628042" duration="9418000" />
+      <workItem from="1701200628042" duration="10047000" />
     </task>
     <task id="LOCAL-00001" summary="modificare nume">
       <option name="closed" value="true" />
@@ -204,7 +196,15 @@
       <option name="project" value="LOCAL" />
       <updated>1701247006975</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="implementare output script propozitii dupa fisierul de statistica">
+      <option name="closed" value="true" />
+      <created>1701252155667</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1701252155667</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -269,6 +269,7 @@
     <MESSAGE value="implementare partiala pipes" />
     <MESSAGE value="implementare script propozitii" />
     <MESSAGE value="implementare scriere si citire din pipe-uri pentru script propozitii" />
-    <option name="LAST_COMMIT_MESSAGE" value="implementare scriere si citire din pipe-uri pentru script propozitii" />
+    <MESSAGE value="implementare output script propozitii dupa fisierul de statistica" />
+    <option name="LAST_COMMIT_MESSAGE" value="implementare output script propozitii dupa fisierul de statistica" />
   </component>
 </project>
