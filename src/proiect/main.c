@@ -24,6 +24,31 @@ typedef struct {
     // Type of file ('B' for BMP, 'D' for Directory, 'L' for Link, 'R' for Regular, 'O' for Others)
 } FileInfo;
 
+void write_lines_to_pipe(char *buffer, size_t buf_size, int pipe_fd) {
+    size_t start = 0; // Start index of the current line
+    for (size_t i = 0; i < buf_size; ++i) {
+        if (buffer[i] == '\n' || buffer[i] == '\0') {
+            // Found the end of a line or end of buffer
+            size_t line_length = i - start;
+
+            // Write the line to the pipe
+            if (write(pipe_fd, buffer + start, line_length) == -1) {
+                perror("Error writing to pipe");
+                return;
+            }
+
+            // Write a newline character to the pipe if it's not the end of the buffer
+            if (buffer[i] != '\0' && write(pipe_fd, "\n", 1) == -1) {
+                perror("Error writing newline to pipe");
+                return;
+            }
+
+            // Move to the start of the next line
+            start = i + 1;
+        }
+    }
+}
+
 void error(char *msg) {
     perror(msg);
     exit(1);
@@ -160,7 +185,7 @@ void printareStatistica(FileInfo fileInfo, char *fisierIesire, char *caracter) {
         char *timpulUltimeiModificariChar = (char *) malloc(10 * sizeof(char));
         sprintf(timpulUltimeiModificariChar, "%ld", fileInfo.timpulModificarii);
         writeCheck(fd, timpulUltimeiModificariChar, strlen(timpulUltimeiModificariChar));
-        writeCheck(fd, "\n", 1);
+        writeCheck(fd, ".\n", 2);
         nrLinii++;
 
         writeCheck(fd, "numarul de legaturi: ", 21);
@@ -222,8 +247,25 @@ void printareStatistica(FileInfo fileInfo, char *fisierIesire, char *caracter) {
             close(fd_stdin[0]); // inchide citirea din pipe a scriptului
 
             // scrie in pipe-ul scriptului la stdin
-            write(fd_stdin[1], "Ana are mere.\n", 14);
-            close(fd_stdin[1]); // inchiude scrierea in pipe a scriptului pentru a trimite EOF
+            //iau continutul fisierului fisierIesire si il scriu in pipe
+            int fdFisierIesire;
+            if ((fdFisierIesire = open(fisierIesire, O_RDONLY)) == -1) {
+                error("Eroare deschidere fisier iesire");
+            }
+            char bufferFisierIesire[100];
+            long nrCaractereCitite;
+
+            while ((nrCaractereCitite = read(fdFisierIesire, bufferFisierIesire, sizeof(bufferFisierIesire))) > 0) {
+                if (write(fd_stdin[1], bufferFisierIesire, nrCaractereCitite) == -1) {
+                    error("Eroare scriere in pipe");
+                    exit(1);
+                }
+            }
+            close(fdFisierIesire);
+
+            write(fd_stdin[1], bufferFisierIesire, sizeof(bufferFisierIesire));
+
+            close(fd_stdin[1]); // inchide scrierea in pipe a scriptului pentru a trimite EOF
 
             char buffer[100];
             read(fd2[0], buffer, sizeof(buffer)); // citeste din pipe outputul scriptului

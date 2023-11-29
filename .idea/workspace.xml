@@ -20,7 +20,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="72a5c6e6-10dd-4165-9cdf-fefbe4c196bb" name="Changes" comment="implementare script propozitii">
+    <list default="true" id="72a5c6e6-10dd-4165-9cdf-fefbe4c196bb" name="Changes" comment="implementare scriere si citire din pipe-uri pentru script propozitii">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Statistici/DirectorSecundar_statistica.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Statistici/DirectorSecundar_statistica.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Statistici/imagine.bmp_statistica.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Statistici/imagine.bmp_statistica.txt" afterDir="false" />
@@ -84,7 +84,7 @@
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="main.c" type="CppFileRunConfiguration" factoryName="CppFileRunConfiguration" temporary="true" PROGRAM_PARAMS="Testing Statistici" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="SO_Project" TARGET_NAME="main.c" CONFIG_NAME="main.c">
+    <configuration name="main.c" type="CppFileRunConfiguration" factoryName="CppFileRunConfiguration" temporary="true" PROGRAM_PARAMS="Testing Statistici a" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="SO-Project" TARGET_NAME="main.c" CONFIG_NAME="main.c">
       <option name="sourceFile" value="src/proiect/main.c" />
       <method v="2">
         <option name="com.jetbrains.cidr.cpp.runfile.CppFileBuildBeforeRunTaskProvider$BasicBuildBeforeRunTask" enabled="true" />
@@ -94,6 +94,11 @@
       <item itemvalue="C/C++ File.main.c" />
       <item itemvalue="CMake Application.SO_Project" />
     </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="C/C++ File.main.c" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -109,7 +114,7 @@
       <workItem from="1700305534014" duration="50000" />
       <workItem from="1700305602618" duration="4162000" />
       <workItem from="1701017167607" duration="1063000" />
-      <workItem from="1701200628042" duration="4700000" />
+      <workItem from="1701200628042" duration="9418000" />
     </task>
     <task id="LOCAL-00001" summary="modificare nume">
       <option name="closed" value="true" />
@@ -191,7 +196,15 @@
       <option name="project" value="LOCAL" />
       <updated>1701202050863</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="implementare scriere si citire din pipe-uri pentru script propozitii">
+      <option name="closed" value="true" />
+      <created>1701247006975</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1701247006975</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -255,6 +268,7 @@
     <MESSAGE value="implementare .bmp alb-negru" />
     <MESSAGE value="implementare partiala pipes" />
     <MESSAGE value="implementare script propozitii" />
-    <option name="LAST_COMMIT_MESSAGE" value="implementare script propozitii" />
+    <MESSAGE value="implementare scriere si citire din pipe-uri pentru script propozitii" />
+    <option name="LAST_COMMIT_MESSAGE" value="implementare scriere si citire din pipe-uri pentru script propozitii" />
   </component>
 </project>

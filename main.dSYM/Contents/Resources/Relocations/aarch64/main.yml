@@ -1,0 +1,16 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     main
+relocations:
+  - { offsetInCU: 0x26, offset: 0x26, size: 0x8, addend: 0x0, symName: _error, symObjAddr: 0x0, symBinAddr: 0x100001530, symSize: 0x20 }
+  - { offsetInCU: 0x60, offset: 0x60, size: 0x8, addend: 0x0, symName: _error, symObjAddr: 0x0, symBinAddr: 0x100001530, symSize: 0x20 }
+  - { offsetInCU: 0x84, offset: 0x84, size: 0x8, addend: 0x0, symName: _bmpAlbNegru, symObjAddr: 0x20, symBinAddr: 0x100001550, symSize: 0x1E0 }
+  - { offsetInCU: 0x150, offset: 0x150, size: 0x8, addend: 0x0, symName: _writeCheck, symObjAddr: 0x200, symBinAddr: 0x100001730, symSize: 0x54 }
+  - { offsetInCU: 0x190, offset: 0x190, size: 0x8, addend: 0x0, symName: _printareStatistica, symObjAddr: 0x254, symBinAddr: 0x100001784, symSize: 0xF38 }
+  - { offsetInCU: 0x360, offset: 0x360, size: 0x8, addend: 0x0, symName: _printareDateBMP, symObjAddr: 0x118C, symBinAddr: 0x1000026BC, symSize: 0x3E0 }
+  - { offsetInCU: 0x418, offset: 0x418, size: 0x8, addend: 0x0, symName: _printareDateRegulareNuBMP, symObjAddr: 0x156C, symBinAddr: 0x100002A9C, symSize: 0x368 }
+  - { offsetInCU: 0x4C0, offset: 0x4C0, size: 0x8, addend: 0x0, symName: _printareDateDirector, symObjAddr: 0x18D4, symBinAddr: 0x100002E04, symSize: 0x368 }
+  - { offsetInCU: 0x568, offset: 0x568, size: 0x8, addend: 0x0, symName: _printareDateLink, symObjAddr: 0x1C3C, symBinAddr: 0x10000316C, symSize: 0x2F8 }
+  - { offsetInCU: 0x5EF, offset: 0x5EF, size: 0x8, addend: 0x0, symName: _decizieFisier, symObjAddr: 0x1F34, symBinAddr: 0x100003464, symSize: 0x4D0 }
+  - { offsetInCU: 0x6FE, offset: 0x6FE, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x2404, symBinAddr: 0x100003934, symSize: 0x124 }
+...
