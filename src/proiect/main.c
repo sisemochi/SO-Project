@@ -24,31 +24,6 @@ typedef struct {
     // Type of file ('B' for BMP, 'D' for Directory, 'L' for Link, 'R' for Regular, 'O' for Others)
 } FileInfo;
 
-void write_lines_to_pipe(char *buffer, size_t buf_size, int pipe_fd) {
-    size_t start = 0; // Start index of the current line
-    for (size_t i = 0; i < buf_size; ++i) {
-        if (buffer[i] == '\n' || buffer[i] == '\0') {
-            // Found the end of a line or end of buffer
-            size_t line_length = i - start;
-
-            // Write the line to the pipe
-            if (write(pipe_fd, buffer + start, line_length) == -1) {
-                perror("Error writing to pipe");
-                return;
-            }
-
-            // Write a newline character to the pipe if it's not the end of the buffer
-            if (buffer[i] != '\0' && write(pipe_fd, "\n", 1) == -1) {
-                perror("Error writing newline to pipe");
-                return;
-            }
-
-            // Move to the start of the next line
-            start = i + 1;
-        }
-    }
-}
-
 void error(char *msg) {
     perror(msg);
     exit(1);

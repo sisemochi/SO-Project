@@ -2,7 +2,7 @@
 
 # Verifică dacă scriptul a primit exact un argument
 if [ "$#" -ne 1 ]; then
-    echo "Utilizare: bash $0 <caracter>"
+    echo "Utilizare: ./$0 <caracter>"
     exit 1
 fi
 
