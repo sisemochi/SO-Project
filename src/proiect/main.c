@@ -30,10 +30,10 @@ void error(char *msg) {
 }
 
 void bmpAlbNegru(int fd, char *header) {
-    int latime = *(int*)&header[18];
-    int inaltime = *(int*)&header[22];
+    int latime = *(int *) &header[18];
+    int inaltime = *(int *) &header[22];
     int padding = (4 - (latime * 3) % 4) % 4;
-    int pixelDataOffset = *(int*)&header[10];
+    int pixelDataOffset = *(int *) &header[10];
     lseek(fd, pixelDataOffset, SEEK_SET);
 
     unsigned char pixeli[3];
@@ -44,7 +44,7 @@ void bmpAlbNegru(int fd, char *header) {
                 close(fd);
             }
 
-            unsigned char gray = (unsigned char)(0.299 * pixeli[2] + 0.587 * pixeli[1] + 0.114 * pixeli[0]);
+            unsigned char gray = (unsigned char) (0.299 * pixeli[2] + 0.587 * pixeli[1] + 0.114 * pixeli[0]);
             lseek(fd, -3, SEEK_CUR);
             memset(pixeli, gray, sizeof(pixeli));
             if (write(fd, pixeli, 3) != 3) {
@@ -58,14 +58,13 @@ void bmpAlbNegru(int fd, char *header) {
 }
 
 
-
 void writeCheck(int fd, char *buffer, unsigned long size) {
     if (write(fd, buffer, size) == -1) {
         error("Eroare scriere");
     }
 }
 
-void printareStatistica(FileInfo fileInfo, char *fisierIesire, char *caracter) {
+void printareStatistica(FileInfo fileInfo, char *fisierIesire, char *caracter, int *fdParinte) {
     int fd;
     if ((fd = open(fisierIesire, O_WRONLY | O_CREAT | O_APPEND, 0644)) == -1) {
         error("Eroare deschidere fisier iesire");
@@ -217,36 +216,58 @@ void printareStatistica(FileInfo fileInfo, char *fisierIesire, char *caracter) {
             perror("execlp");
             exit(1);
         } else if (pid > 0) {
-            // proces parinte
-            close(fd2[1]); // inchide scrierea in pipe
-            close(fd_stdin[0]); // inchide citirea din pipe a scriptului
+            int status;
+            waitpid(pid, &status, 0);
+            if (WIFEXITED(status)) {
+                // proces parinte
+                close(fd2[1]); // inchide scrierea in pipe
+                close(fd_stdin[0]); // inchide citirea din pipe a scriptului
 
-            // scrie in pipe-ul scriptului la stdin
-            //iau continutul fisierului fisierIesire si il scriu in pipe
-            int fdFisierIesire;
-            if ((fdFisierIesire = open(fisierIesire, O_RDONLY)) == -1) {
-                error("Eroare deschidere fisier iesire");
-            }
-            char bufferFisierIesire[100];
-            long nrCaractereCitite;
-
-            while ((nrCaractereCitite = read(fdFisierIesire, bufferFisierIesire, sizeof(bufferFisierIesire))) > 0) {
-                if (write(fd_stdin[1], bufferFisierIesire, nrCaractereCitite) == -1) {
-                    error("Eroare scriere in pipe");
-                    exit(1);
+                // scrie in pipe-ul scriptului la stdin
+                //iau continutul fisierului fisierIesire si il scriu in pipe
+                int fdFisierIesire;
+                if ((fdFisierIesire = open(fisierIesire, O_RDONLY)) == -1) {
+                    error("Eroare deschidere fisier iesire");
                 }
+                char bufferFisierIesire[100];
+                long nrCaractereCitite;
+
+                while ((nrCaractereCitite = read(fdFisierIesire, bufferFisierIesire, sizeof(bufferFisierIesire))) > 0) {
+                    if (write(fd_stdin[1], bufferFisierIesire, nrCaractereCitite) == -1) {
+                        error("Eroare scriere in pipe");
+                        exit(1);
+                    }
+                }
+                close(fdFisierIesire);
+
+                write(fd_stdin[1], bufferFisierIesire, sizeof(bufferFisierIesire));
+
+                close(fd_stdin[1]); // inchide scrierea in pipe a scriptului pentru a trimite EOF
+
+                char buffer[100];
+                read(fd2[0], buffer, sizeof(buffer)); // citeste din pipe outputul scriptului
+                printf("\n-------------------------\nOutput comanda: \n%s\n----------------------\n", buffer);
+
+                close(fd2[0]); // inchide citirea din pipe
+
+                //scriere buffer in fd_parinte
+                if (fdParinte != NULL) {
+                    printf("Scriere in pipe non-null\nVom scrie: %s\n", buffer);
+                    ssize_t bytesWritten = write(fdParinte[1], "hei", 3);
+                    if (bytesWritten == -1) {
+                        printf("---------------------\nEroare scriere in pipe\n");
+                        error("Error writing to pipe");
+                    }
+                }
+
+            } else {
+                printf("Child terminated abnormally\n");
             }
-            close(fdFisierIesire);
 
-            write(fd_stdin[1], bufferFisierIesire, sizeof(bufferFisierIesire));
 
-            close(fd_stdin[1]); // inchide scrierea in pipe a scriptului pentru a trimite EOF
+//            exit(66);
 
-            char buffer[100];
-            read(fd2[0], buffer, sizeof(buffer)); // citeste din pipe outputul scriptului
-            printf("\n-------------------------\nOutput comanda: \n%s\n----------------------\n", buffer);
-
-            close(fd2[0]); // inchide citirea din pipe
+//            close(fdParinte[1]);
         }
     }
 
@@ -399,15 +420,14 @@ void printareDateBMP(struct dirent *fisier, char *caleFisier, struct stat statFi
     strcat(caleIesire, fisier->d_name);
     strcat(caleIesire, "_statistica.txt");
 
-    char * dummy = malloc(1);
-    printareStatistica(fileInfo, caleIesire, dummy);
-    free(dummy);
+    printareStatistica(fileInfo, caleIesire, NULL, NULL);
 
     close(fd);
 
 }
 
-void printareDateRegulareNuBMP(struct dirent *fisier, char *caleFisier, struct stat statFisier, char *fisierIesire, char *caracter) {
+void printareDateRegulareNuBMP(struct dirent *fisier, char *caleFisier, struct stat statFisier, char *fisierIesire,
+                               char *caracter, int *fdParinte) {
     int fd;
     char caleNoua[100];
     strcpy(caleNoua, caleFisier);
@@ -476,7 +496,7 @@ void printareDateRegulareNuBMP(struct dirent *fisier, char *caleFisier, struct s
     strcat(caleIesire, fisier->d_name);
     strcat(caleIesire, "_statistica.txt");
 
-    printareStatistica(fileInfo, caleIesire, caracter);
+    printareStatistica(fileInfo, caleIesire, caracter, fdParinte);
 
     close(fd);
 
@@ -549,9 +569,7 @@ void printareDateDirector(struct dirent *fisier, char *caleFisier, struct stat s
     strcat(caleIesire, fisier->d_name);
     strcat(caleIesire, "_statistica.txt");
 
-    char *dummy = malloc(1);
-    printareStatistica(fileInfo, caleIesire, dummy);
-    free(dummy);
+    printareStatistica(fileInfo, caleIesire, NULL, NULL);
 
     close(fd);
 
@@ -616,14 +634,22 @@ void printareDateLink(struct dirent *fisier, char *caleFisier, struct stat statF
     }
     fileInfo.type = 'L';
 
-    char *dummy = malloc(1);
-    printareStatistica(fileInfo, caleFinal, dummy);
-    free(dummy);
+
+    printareStatistica(fileInfo, caleFinal, NULL, NULL);
+
 }
 
 void decizieFisier(struct dirent *fisier, char *caleFisier, char *fisierIesire, char *caracter) {
     pid_t pid;
     pid = fork();
+
+    int isRegular = 0;
+
+    int fdParinte[2]; // fdParinte[0] - citire, fdParinte[1] - scriere
+    if (pipe(fdParinte) == -1) {
+        error("Eroare pipe");
+    }
+
     if (pid == -1) {
         error("Eroare fork");
     } else if (pid == 0) {
@@ -651,19 +677,40 @@ void decizieFisier(struct dirent *fisier, char *caleFisier, char *fisierIesire, 
                 printareDateBMP(fisier, caleFisier, statFisier, fisierIesire);
             } else {
                 printf("Fisierul %s nu este un .bmp\n\n", fisier->d_name);
-                printareDateRegulareNuBMP(fisier, caleFisier, statFisier, fisierIesire, caracter);
+                isRegular = 1;
+                printareDateRegulareNuBMP(fisier, caleFisier, statFisier, fisierIesire, caracter, fdParinte);
             }
         } else {
             printf("%s este Altceva\n\n", fisier->d_name);
         }
 
-        exit(0);//terminam procesul copil daca nu a fost terminat pana acum
+//        exit(0);//terminam procesul copil daca nu a fost terminat pana acum
     } else if (pid > 0) {
         //proces parinte
         printf("Asteptam procesul copil...\n");
         int status;
         waitpid(pid, &status, 0);
         if (WIFEXITED(status)) {
+//            if(isRegular == 1){
+            printf("Procesul copil a terminat cu succes\n");
+            close(fdParinte[1]); // inchide scrierea in pipe
+
+            char buffer[100];
+            ssize_t bytesRead;
+            bytesRead = read(fdParinte[0], buffer, sizeof(buffer));
+            printf("bytesRead: %ld\n", bytesRead);
+            while ((bytesRead = read(fdParinte[0], buffer, sizeof(buffer))) > 0) {
+                printf("In while\n");
+                buffer[bytesRead] = '\0';
+                printf("\n-------------------------\nOutput comanda din parintele mare: \n");
+                fwrite(buffer, sizeof(char), bytesRead, stdout);
+                printf("\n----------------------\n");
+            }
+
+            close(fdParinte[0]); //inchide citirea din pipe
+//            }
+
+
             int codIesire = WEXITSTATUS(status);
 
             int fd = open("statistica.txt", O_WRONLY | O_CREAT | O_APPEND, 0644);
