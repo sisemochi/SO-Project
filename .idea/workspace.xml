@@ -20,16 +20,14 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="72a5c6e6-10dd-4165-9cdf-fefbe4c196bb" name="Changes" comment="curatare cod">
+    <list default="true" id="72a5c6e6-10dd-4165-9cdf-fefbe4c196bb" name="Changes" comment="pipe-uri + script gata">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Statistici/DirectorSecundar_statistica.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Statistici/DirectorSecundar_statistica.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Statistici/imagine.bmp_statistica.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Statistici/imagine.bmp_statistica.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Statistici/link_statistica.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Statistici/link_statistica.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Statistici/text.txt_statistica.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Statistici/text.txt_statistica.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Testing/imagine.bmp" beforeDir="false" afterPath="$PROJECT_DIR$/Testing/imagine.bmp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main" beforeDir="false" afterPath="$PROJECT_DIR$/main" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/proiect/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/proiect/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/proiect/propozitii.sh" beforeDir="false" afterPath="$PROJECT_DIR$/src/proiect/propozitii.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/statistica.txt" beforeDir="false" afterPath="$PROJECT_DIR$/statistica.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -55,30 +53,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "C/C++ File.main.c.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "RunOnceActivity.readMode.enableVisualFormatting": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "pipe",
-    "last_opened_file_path": "/Users/Kaarl/SO-Project",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "ml.llm.LLMConfigurable",
-    "structure.view.defaults.are.configured": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;C/C++ File.main.c.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;pipe&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/Kaarl/SO-Project&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;ml.llm.LLMConfigurable&quot;,
+    &quot;structure.view.defaults.are.configured&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
@@ -125,7 +123,8 @@
       <workItem from="1701626749012" duration="362000" />
       <workItem from="1701785618870" duration="10585000" />
       <workItem from="1701878470179" duration="598000" />
-      <workItem from="1702023104656" duration="7246000" />
+      <workItem from="1702023104656" duration="7287000" />
+      <workItem from="1702074170150" duration="1688000" />
     </task>
     <task id="LOCAL-00001" summary="modificare nume">
       <option name="closed" value="true" />
@@ -239,7 +238,15 @@
       <option name="project" value="LOCAL" />
       <updated>1701627105390</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="pipe-uri + script gata">
+      <option name="closed" value="true" />
+      <created>1702043508160</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1702043508160</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -307,7 +314,8 @@
     <MESSAGE value="implementare output script propozitii dupa fisierul de statistica" />
     <MESSAGE value="modificare bin/bash" />
     <MESSAGE value="curatare cod" />
-    <option name="LAST_COMMIT_MESSAGE" value="curatare cod" />
+    <MESSAGE value="pipe-uri + script gata" />
+    <option name="LAST_COMMIT_MESSAGE" value="pipe-uri + script gata" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

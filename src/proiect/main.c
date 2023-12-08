@@ -9,6 +9,8 @@
 #include <time.h>
 #include <dirent.h>
 
+int nrPropozitiiCorecteTotale = 0;
+
 typedef struct {
     char nume[256];
     int inaltime;
@@ -21,7 +23,7 @@ typedef struct {
     char drepturiGrup[3];
     char drepturiAltii[3];
     char type;
-    // Type of file ('B' for BMP, 'D' for Directory, 'L' for Link, 'R' for Regular, 'O' for Others)
+    // tipul fisierului ('B' = BMP, 'D' = Directory, 'L' = Link, 'R' = Regular, 'O' = Others)
 } FileInfo;
 
 void error(char *msg) {
@@ -30,10 +32,27 @@ void error(char *msg) {
 }
 
 void bmpAlbNegru(int fd, char *header) {
+    //explicatie *(int *) &header[x]
+    //&header[x] : adresa celui de al x-ulea element din header
+    //(int *) : considera adresa ca un pointer la int
+    //* : ia valoarea de la adresa respectiva
+
+
     int latime = *(int *) &header[18];
     int inaltime = *(int *) &header[22];
+
+    //explicatie padding
+    //informatia fiecarui pixel la fisiere bmp e de 3 bytes(pt rosu, verde, albastru)
+    //lungimea unei linii este de (3 * latime) bytes
+    //aceasta TREBUIE sa fie multiplu de 4
+    //calculam cu primul % cati bytes suntem peste limita
+    //scadem 4 ca sa calculam cati bytes mai avem pana la urmatorul multiplu de 4
+    //inca un %4 pentru cazul in care latime*3 era deja multiplu de 4
+    //padding e deci folosit pt a verifica ca fiecare linie de pixeli e pe 4 bytes
     int padding = (4 - (latime * 3) % 4) % 4;
+
     int pixelDataOffset = *(int *) &header[10];
+
     lseek(fd, pixelDataOffset, SEEK_SET);
 
     unsigned char pixeli[3];
@@ -44,8 +63,13 @@ void bmpAlbNegru(int fd, char *header) {
                 close(fd);
             }
 
+            //formula de pe cv
             unsigned char gray = (unsigned char) (0.299 * pixeli[2] + 0.587 * pixeli[1] + 0.114 * pixeli[0]);
+
+            //mergem inapoi in memorie de unde am citit pixelii pe care ii modificam
             lseek(fd, -3, SEEK_CUR);
+
+            //rescriem memoria cu pixelii gri
             memset(pixeli, gray, sizeof(pixeli));
             if (write(fd, pixeli, 3) != 3) {
                 error("Writing pixeli failed");
@@ -57,7 +81,7 @@ void bmpAlbNegru(int fd, char *header) {
 
 }
 
-
+//un write cu error handling integrat
 void writeCheck(int fd, char *buffer, unsigned long size) {
     if (write(fd, buffer, size) == -1) {
         error("Eroare scriere");
@@ -72,6 +96,7 @@ void printareStatistica(FileInfo fileInfo, char *fisierIesire, char *caracter, i
     int nrLinii = 0;
 
     if (fileInfo.type == 'B') {
+        //fisier .bmp
         writeCheck(fd, "nume fisier:", 12);
         writeCheck(fd, fileInfo.nume, strlen(fileInfo.nume));
         writeCheck(fd, "\n", 1);
@@ -136,6 +161,7 @@ void printareStatistica(FileInfo fileInfo, char *fisierIesire, char *caracter, i
     }
 
     if (fileInfo.type == 'R') {
+        //fisier regular nu .bmp
         writeCheck(fd, "nume fisier:", 12);
         writeCheck(fd, fileInfo.nume, strlen(fileInfo.nume));
         writeCheck(fd, "\n", 1);
@@ -235,6 +261,7 @@ void printareStatistica(FileInfo fileInfo, char *fisierIesire, char *caracter, i
                 close(fd_stdin[1]); // inchide scrierea in pipe a scriptului pentru a trimite EOF
 
                 char buffer[100];
+                memset(buffer, 0, sizeof(buffer));
                 read(fd2[0], buffer, sizeof(buffer)); // citeste din pipe outputul scriptului
                 printf("\n-------------------------\nOutput comanda: \n%s\n----------------------\n", buffer);
 
@@ -243,7 +270,7 @@ void printareStatistica(FileInfo fileInfo, char *fisierIesire, char *caracter, i
                 //scriere buffer in fd_parinte
                 if (fdParinte != NULL) {
 //                    printf("Scriere in pipe non-null\nVom scrie: %s\n", buffer);
-                    ssize_t bytesWritten = write(fdParinte[1], "hei", 3);
+                    ssize_t bytesWritten = write(fdParinte[1], buffer, sizeof(buffer));
                     if (bytesWritten == -1) {
                         printf("---------------------\nEroare scriere in pipe\n");
                         error("Error writing to pipe");
@@ -257,6 +284,7 @@ void printareStatistica(FileInfo fileInfo, char *fisierIesire, char *caracter, i
     }
 
     if (fileInfo.type == 'L') {
+        //fisier symbolic link
         writeCheck(fd, "nume legatura: ", 15);
         writeCheck(fd, fileInfo.nume, strlen(fileInfo.nume));
         writeCheck(fd, "\n", 1);
@@ -294,6 +322,7 @@ void printareStatistica(FileInfo fileInfo, char *fisierIesire, char *caracter, i
     }
 
     if (fileInfo.type == 'D') {
+        //fisier director
         writeCheck(fd, "nume director: ", 15);
         writeCheck(fd, fileInfo.nume, strlen(fileInfo.nume));
         writeCheck(fd, "\n", 1);
@@ -328,6 +357,7 @@ void printareStatistica(FileInfo fileInfo, char *fisierIesire, char *caracter, i
 }
 
 void printareDateBMP(struct dirent *fisier, char *caleFisier, struct stat statFisier, char *fisierIesire) {
+    //generare nume fisier statistica
     char caleNoua[100];
     strcpy(caleNoua, caleFisier);
     strcat(caleNoua, "/");
@@ -414,6 +444,8 @@ void printareDateBMP(struct dirent *fisier, char *caleFisier, struct stat statFi
 void printareDateRegulareNuBMP(struct dirent *fisier, char *caleFisier, struct stat statFisier, char *fisierIesire,
                                char *caracter, int *fdParinte) {
     int fd;
+
+    //generare nume fisier statistica
     char caleNoua[100];
     strcpy(caleNoua, caleFisier);
     strcat(caleNoua, "/");
@@ -489,6 +521,8 @@ void printareDateRegulareNuBMP(struct dirent *fisier, char *caleFisier, struct s
 
 void printareDateDirector(struct dirent *fisier, char *caleFisier, struct stat statFisier, char *fisierIesire) {
     int fd;
+
+    //generare nume fisier statistica
     char caleNoua[100];
     strcpy(caleNoua, caleFisier);
     strcat(caleNoua, "/");
@@ -561,6 +595,7 @@ void printareDateDirector(struct dirent *fisier, char *caleFisier, struct stat s
 }
 
 void printareDateLink(struct dirent *fisier, char *caleFisier, struct stat statFisier, char *fisierIesire) {
+    //generare nume fisier statistica
     char *caleFinal = malloc(100);
     strcpy(caleFinal, fisierIesire);
     strcat(caleFinal, "/");
@@ -625,88 +660,101 @@ void printareDateLink(struct dirent *fisier, char *caleFisier, struct stat statF
 }
 
 void decizieFisier(struct dirent *fisier, char *caleFisier, char *fisierIesire, char *caracter) {
-    int fdParinte[2]; // fdParinte[0] - citire, fdParinte[1] - scriere
-    if (pipe(fdParinte) == -1) {
+    int pipeParinteCopil[2]; // pipeParinteCopil[0] - citire, pipeParinteCopil[1] - scriere
+    if (pipe(pipeParinteCopil) == -1) {
         error("Eroare pipe");
     }
-    int isRegular = 0;
+    int isRegular = 0;  //flag pentru a stii daca fisierul e regular si nu e .bmp
 
+    struct stat statFisier;
+
+    //creare path catre fisier/document
+    char caleNoua[100];
+    strcpy(caleNoua, caleFisier);
+    strcat(caleNoua, "/");
+    strcat(caleNoua, fisier->d_name);
+
+    if (lstat(caleNoua, &statFisier) == -1) {
+        error("Eroare lstat");
+    }
+
+    if(S_ISREG(statFisier.st_mode) && strcmp(fisier->d_name, ".bmp") != 0){
+        isRegular = 1; //setare flag
+    };
+
+
+    //initializare fork
     pid_t pid;
     pid = fork();
     if (pid == -1) {
         error("Eroare fork");
     } else if (pid == 0) {
-        //Proces child
-        struct stat statFisier;
-        char caleNoua[100];
-        strcpy(caleNoua, caleFisier);
-        strcat(caleNoua, "/");
-        strcat(caleNoua, fisier->d_name);
-
-        if (lstat(caleNoua, &statFisier) == -1) {
-            error("Eroare lstat");
-        }
+        //Proces copil
 
         if (S_ISLNK(statFisier.st_mode)) {
+            //fisierul e symbolic link
             printf("%s este un Link\n\n", fisier->d_name);
             printareDateLink(fisier, caleFisier, statFisier, fisierIesire);
         } else if (S_ISDIR(statFisier.st_mode)) {
+            //fisierul e director
             printf("%s este un Director\n\n", fisier->d_name);
             printareDateDirector(fisier, caleFisier, statFisier, fisierIesire);
         } else if (S_ISREG(statFisier.st_mode)) {
+            //fisierul e regular
             char *extensie = strrchr(fisier->d_name, '.');
             if (extensie != NULL && strcmp(extensie, ".bmp") == 0) {
+                //fisierul e regular si .bmp
                 printf("Fisierul %s este un .bmp\n\n", fisier->d_name);
                 printareDateBMP(fisier, caleFisier, statFisier, fisierIesire);
             } else {
+                //fisierul e regular dar nu .bmp
                 printf("Fisierul %s nu este un .bmp\n\n", fisier->d_name);
-                isRegular = 1;
-                printareDateRegulareNuBMP(fisier, caleFisier, statFisier, fisierIesire, caracter, fdParinte);
+                printareDateRegulareNuBMP(fisier, caleFisier, statFisier, fisierIesire, caracter, pipeParinteCopil);
             }
         } else {
             printf("%s este Altceva\n\n", fisier->d_name);
         }
-
-//        exit(0);//terminam procesul copil daca nu a fost terminat pana acum
     } else if (pid > 0) {
         //proces parinte
         printf("Asteptam procesul copil...\n");
         int status;
         waitpid(pid, &status, 0);
+
+        //verificare status proces copil
         if (WIFEXITED(status)) {
             if (isRegular) {
-                //codul asta nu ruleaza?
-                //aici ar trebui facuta suma, din buffer
-                printf("Procesul copil a terminat cu succes\n");
-                close(fdParinte[1]); // inchide scrierea in pipe
+                //citim din pipe daca am prelucrat un fisier regular fara .bmp
+                close(pipeParinteCopil[1]); // inchide scrierea in pipe
 
                 char buffer[100];
                 ssize_t bytesRead;
-                bytesRead = read(fdParinte[0], buffer, sizeof(buffer));
-                printf("bytesRead: %ld\n", bytesRead);
-                while ((bytesRead = read(fdParinte[0], buffer, sizeof(buffer))) >= 0) {
-                    printf("In while\n");
-                    buffer[bytesRead] = '\0';
-                    printf("\n-------------------------\nOutput comanda din parintele mare: \n");
-                    fwrite(buffer, sizeof(char), bytesRead, stdout);
-                    printf("\n----------------------\n");
-                }
+                bytesRead = read(pipeParinteCopil[0], buffer, sizeof(buffer));
 
-                close(fdParinte[0]); //inchide citirea din pipe
+                char *outputComanda = buffer;   //salvam output-ul scriptului din buffer
+                outputComanda++;    //trecem la al 2-lea caracter, primul fiind \n
+
+                printf("buffer parinte final: %s", outputComanda);
+
+                int nrPropozitiiCorecte = atoi(outputComanda);  //transformam din string in int
+
+                nrPropozitiiCorecteTotale += nrPropozitiiCorecte;   //calculam global toate propozitiile corecte
+
+                close(pipeParinteCopil[0]); //inchide citirea din pipe
             }
 
 
-            close(fdParinte[0]);
-            close(fdParinte[1]);
+            close(pipeParinteCopil[0]);
+            close(pipeParinteCopil[1]);
 
             int codIesire = WEXITSTATUS(status);
 
+            //scriere in fisierul de statistica
             int fd = open("statistica.txt", O_WRONLY | O_CREAT | O_APPEND, 0644);
 
             write(fd, fisier->d_name, strlen(fisier->d_name));
             write(fd, " ", 1);
             char *codIesireChar = malloc(50);
-            sprintf(codIesireChar, "%d", codIesire);
+            sprintf(codIesireChar, "%d", codIesire); //convertim codul de iesire de la int la char*
             write(fd, codIesireChar, strlen(codIesireChar));
             write(fd, "\n", 1);
 
@@ -714,8 +762,8 @@ void decizieFisier(struct dirent *fisier, char *caleFisier, char *fisierIesire, 
         } else {
             printf("Procesul copil a terminat cu eroare\n");
         }
+        isRegular = 0;  //resetam flagul pentru urmatorul fisier
     }
-
 }
 
 
@@ -739,6 +787,8 @@ int main(int argc, char **argv) {
         }
         decizieFisier(directorStruct, argv[1], argv[2], argv[3]);
     }
+
+    printf("\nAu fost gasite %d propozitii corecte in fisierele de statistica\n", nrPropozitiiCorecteTotale);
 
 
     return 0;

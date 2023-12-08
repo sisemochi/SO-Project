@@ -405,3 +405,135 @@ Drepturi de acces user: rw-
 Drepturi de acces grup: r--
 Drepturi de acces altii: r--
 
+nume fisier:imagine.bmp
+inaltime: 1280
+lungime: 1920
+Dimensiune: 7372938
+Identificatorul utilizatorului: 501
+Timpul ultimei modificari: 1702043087
+numarul de legaturi: 1
+Drepturi de acces user: rw-
+Drepturi de acces grup: r--
+Drepturi de acces altii: r--
+
+nume fisier:imagine.bmp
+inaltime: 1280
+lungime: 1920
+Dimensiune: 7372938
+Identificatorul utilizatorului: 501
+Timpul ultimei modificari: 1702074774
+numarul de legaturi: 1
+Drepturi de acces user: rw-
+Drepturi de acces grup: r--
+Drepturi de acces altii: r--
+
+nume fisier:imagine.bmp
+inaltime: 1280
+lungime: 1920
+Dimensiune: 7372938
+Identificatorul utilizatorului: 501
+Timpul ultimei modificari: 1702074827
+numarul de legaturi: 1
+Drepturi de acces user: rw-
+Drepturi de acces grup: r--
+Drepturi de acces altii: r--
+
+nume fisier:imagine.bmp
+inaltime: 1280
+lungime: 1920
+Dimensiune: 7372938
+Identificatorul utilizatorului: 501
+Timpul ultimei modificari: 1702075068
+numarul de legaturi: 1
+Drepturi de acces user: rw-
+Drepturi de acces grup: r--
+Drepturi de acces altii: r--
+
+nume fisier:imagine.bmp
+inaltime: 1280
+lungime: 1920
+Dimensiune: 7372938
+Identificatorul utilizatorului: 501
+Timpul ultimei modificari: 1702075231
+numarul de legaturi: 1
+Drepturi de acces user: rw-
+Drepturi de acces grup: r--
+Drepturi de acces altii: r--
+
+nume fisier:imagine.bmp
+inaltime: 1280
+lungime: 1920
+Dimensiune: 7372938
+Identificatorul utilizatorului: 501
+Timpul ultimei modificari: 1702075306
+numarul de legaturi: 1
+Drepturi de acces user: rw-
+Drepturi de acces grup: r--
+Drepturi de acces altii: r--
+
+nume fisier:imagine.bmp
+inaltime: 1280
+lungime: 1920
+Dimensiune: 7372938
+Identificatorul utilizatorului: 501
+Timpul ultimei modificari: 1702075462
+numarul de legaturi: 1
+Drepturi de acces user: rw-
+Drepturi de acces grup: r--
+Drepturi de acces altii: r--
+
+nume fisier:imagine.bmp
+inaltime: 1280
+lungime: 1920
+Dimensiune: 7372938
+Identificatorul utilizatorului: 501
+Timpul ultimei modificari: 1702075524
+numarul de legaturi: 1
+Drepturi de acces user: rw-
+Drepturi de acces grup: r--
+Drepturi de acces altii: r--
+
+nume fisier:imagine.bmp
+inaltime: 1280
+lungime: 1920
+Dimensiune: 7372938
+Identificatorul utilizatorului: 501
+Timpul ultimei modificari: 1702075628
+numarul de legaturi: 1
+Drepturi de acces user: rw-
+Drepturi de acces grup: r--
+Drepturi de acces altii: r--
+
+nume fisier:imagine.bmp
+inaltime: 1280
+lungime: 1920
+Dimensiune: 7372938
+Identificatorul utilizatorului: 501
+Timpul ultimei modificari: 1702075850
+numarul de legaturi: 1
+Drepturi de acces user: rw-
+Drepturi de acces grup: r--
+Drepturi de acces altii: r--
+
+nume fisier:imagine.bmp
+inaltime: 1280
+lungime: 1920
+Dimensiune: 7372938
+Identificatorul utilizatorului: 501
+Timpul ultimei modificari: 1702075867
+numarul de legaturi: 1
+Drepturi de acces user: rw-
+Drepturi de acces grup: r--
+Drepturi de acces altii: r--
+
+nume fisier:imagine.bmp
+inaltime: 1280
+lungime: 1920
+Dimensiune: 7372938
+Identificatorul utilizatorului: 501
+Timpul ultimei modificari: 1702076053
+numarul de legaturi: 1
+Drepturi de acces user: rw-
+Drepturi de acces grup: r--
+Drepturi de acces altii: r--
+
