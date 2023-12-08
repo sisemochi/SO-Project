@@ -195,6 +195,16 @@ void printareStatistica(FileInfo fileInfo, char *fisierIesire, char *caracter, i
             exit(1);
         }
 
+        char comanda[200];
+        memset(comanda, 0, sizeof comanda);
+        strcat(comanda, "cat ");
+        strcat(comanda, fisierIesire);
+        strcat(comanda, " | ");
+        strcat(comanda, "./src/proiect/propozitii.sh ");
+        strcat(comanda, caracter);
+
+        printf("\n-----------\nRulam comanda: %s\n", comanda);
+
         pid_t pid;
         pid = fork();
         if (pid == -1) {
@@ -210,37 +220,17 @@ void printareStatistica(FileInfo fileInfo, char *fisierIesire, char *caracter, i
             close(fd2[1]); // inchide scriere in pipe
             close(fd_stdin[0]); // inchide citirea din pipe a scriptului
 
-            execlp("/bin/zsh", "zsh", "./src/proiect/propozitii.sh", caracter, (char *) NULL);
+            system(comanda);
 
-            // daca ajunge aici, inseamna ca nu s-a putut executa scriptul
-            perror("execlp");
             exit(1);
         } else if (pid > 0) {
             int status;
             waitpid(pid, &status, 0);
             if (WIFEXITED(status)) {
+                printf("In parinte dupa script");
                 // proces parinte
                 close(fd2[1]); // inchide scrierea in pipe
                 close(fd_stdin[0]); // inchide citirea din pipe a scriptului
-
-                // scrie in pipe-ul scriptului la stdin
-                //iau continutul fisierului fisierIesire si il scriu in pipe
-                int fdFisierIesire;
-                if ((fdFisierIesire = open(fisierIesire, O_RDONLY)) == -1) {
-                    error("Eroare deschidere fisier iesire");
-                }
-                char bufferFisierIesire[100];
-                long nrCaractereCitite;
-
-                while ((nrCaractereCitite = read(fdFisierIesire, bufferFisierIesire, sizeof(bufferFisierIesire))) > 0) {
-                    if (write(fd_stdin[1], bufferFisierIesire, nrCaractereCitite) == -1) {
-                        error("Eroare scriere in pipe");
-                        exit(1);
-                    }
-                }
-                close(fdFisierIesire);
-
-                write(fd_stdin[1], bufferFisierIesire, sizeof(bufferFisierIesire));
 
                 close(fd_stdin[1]); // inchide scrierea in pipe a scriptului pentru a trimite EOF
 
@@ -252,7 +242,7 @@ void printareStatistica(FileInfo fileInfo, char *fisierIesire, char *caracter, i
 
                 //scriere buffer in fd_parinte
                 if (fdParinte != NULL) {
-                    printf("Scriere in pipe non-null\nVom scrie: %s\n", buffer);
+//                    printf("Scriere in pipe non-null\nVom scrie: %s\n", buffer);
                     ssize_t bytesWritten = write(fdParinte[1], "hei", 3);
                     if (bytesWritten == -1) {
                         printf("---------------------\nEroare scriere in pipe\n");
@@ -263,11 +253,6 @@ void printareStatistica(FileInfo fileInfo, char *fisierIesire, char *caracter, i
             } else {
                 printf("Child terminated abnormally\n");
             }
-
-
-//            exit(66);
-
-//            close(fdParinte[1]);
         }
     }
 
@@ -640,16 +625,14 @@ void printareDateLink(struct dirent *fisier, char *caleFisier, struct stat statF
 }
 
 void decizieFisier(struct dirent *fisier, char *caleFisier, char *fisierIesire, char *caracter) {
-    pid_t pid;
-    pid = fork();
-
-    int isRegular = 0;
-
     int fdParinte[2]; // fdParinte[0] - citire, fdParinte[1] - scriere
     if (pipe(fdParinte) == -1) {
         error("Eroare pipe");
     }
+    int isRegular = 0;
 
+    pid_t pid;
+    pid = fork();
     if (pid == -1) {
         error("Eroare fork");
     } else if (pid == 0) {
@@ -691,25 +674,30 @@ void decizieFisier(struct dirent *fisier, char *caleFisier, char *fisierIesire, 
         int status;
         waitpid(pid, &status, 0);
         if (WIFEXITED(status)) {
-//            if(isRegular == 1){
-            printf("Procesul copil a terminat cu succes\n");
-            close(fdParinte[1]); // inchide scrierea in pipe
+            if (isRegular) {
+                //codul asta nu ruleaza?
+                //aici ar trebui facuta suma, din buffer
+                printf("Procesul copil a terminat cu succes\n");
+                close(fdParinte[1]); // inchide scrierea in pipe
 
-            char buffer[100];
-            ssize_t bytesRead;
-            bytesRead = read(fdParinte[0], buffer, sizeof(buffer));
-            printf("bytesRead: %ld\n", bytesRead);
-            while ((bytesRead = read(fdParinte[0], buffer, sizeof(buffer))) > 0) {
-                printf("In while\n");
-                buffer[bytesRead] = '\0';
-                printf("\n-------------------------\nOutput comanda din parintele mare: \n");
-                fwrite(buffer, sizeof(char), bytesRead, stdout);
-                printf("\n----------------------\n");
+                char buffer[100];
+                ssize_t bytesRead;
+                bytesRead = read(fdParinte[0], buffer, sizeof(buffer));
+                printf("bytesRead: %ld\n", bytesRead);
+                while ((bytesRead = read(fdParinte[0], buffer, sizeof(buffer))) >= 0) {
+                    printf("In while\n");
+                    buffer[bytesRead] = '\0';
+                    printf("\n-------------------------\nOutput comanda din parintele mare: \n");
+                    fwrite(buffer, sizeof(char), bytesRead, stdout);
+                    printf("\n----------------------\n");
+                }
+
+                close(fdParinte[0]); //inchide citirea din pipe
             }
 
-            close(fdParinte[0]); //inchide citirea din pipe
-//            }
 
+            close(fdParinte[0]);
+            close(fdParinte[1]);
 
             int codIesire = WEXITSTATUS(status);
 

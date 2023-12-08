@@ -24,4 +24,3 @@ done
 
 echo ""
 echo "$contor"
-exit 2
